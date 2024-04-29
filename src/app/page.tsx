@@ -5,7 +5,7 @@ import { UploadDropzone } from "@/lib/uploadthing";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col gap-12 p-24">
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-12">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1 text-center">
           <h1 className="text-2xl font-bold">Science-based studying.</h1>

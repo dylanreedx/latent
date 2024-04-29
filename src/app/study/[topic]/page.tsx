@@ -14,7 +14,7 @@ export default function Page({ params }: { params: { topic: string } }) {
     setCurrentQuestion(questions[questionNumber]);
   }, [questionNumber]);
   return (
-    <main className="flex min-h-screen flex-col gap-12 p-24">
+    <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-12">
       <h1>{decodeURI(params.topic)}</h1>
 
       <QuestionCard
