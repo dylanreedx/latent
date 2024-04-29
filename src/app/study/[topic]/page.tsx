@@ -2,32 +2,26 @@
 import { Progress } from "@/components/ui/progress";
 import QuestionCard from "@/components/ui/question-card";
 import { questions } from "@/lib/mockQuestions";
+import { useQuizStore } from "@/state/store";
 import React from "react";
 
 export default function Page({ params }: { params: { topic: string } }) {
-  const [questionNumber, setQuestionNumber] = React.useState(0);
-  const [currentQuestion, setCurrentQuestion] = React.useState(
-    questions[questionNumber],
-  );
-
-  React.useEffect(() => {
-    setCurrentQuestion(questions[questionNumber]);
-  }, [questionNumber]);
+  const quiz = useQuizStore();
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-12">
       <h1>{decodeURI(params.topic)}</h1>
 
       <QuestionCard
-        question={currentQuestion.question}
-        options={currentQuestion.options}
-        answer={currentQuestion.answer}
-        numOfQuestions={questions.length}
-        currentQuestionNumber={questionNumber}
-        next={() => {
-          setQuestionNumber((prev) => prev + 1);
-        }}
+        question={quiz.questions[quiz.currentQuestionNumber].question}
+        options={quiz.questions[quiz.currentQuestionNumber].options}
+        answer={quiz.questions[quiz.currentQuestionNumber].answer}
+        numOfQuestions={quiz.numOfQuestions}
+        currentQuestionNumber={quiz.currentQuestionNumber}
+        next={quiz.next}
       />
-      <Progress value={(questionNumber / questions.length) * 100} />
+      <Progress
+        value={(quiz.currentQuestionNumber / quiz.numOfQuestions) * 100}
+      />
     </main>
   );
 }

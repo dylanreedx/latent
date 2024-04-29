@@ -10,6 +10,7 @@ import {
   CardFooter,
 } from "./card";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 type QuestionCardProps = {
   question: string;
@@ -28,6 +29,7 @@ export default function QuestionCard({
   currentQuestionNumber,
   next,
 }: QuestionCardProps) {
+  const router = useRouter();
   const [selectedOption, setSelectedOption] = React.useState<number | null>(
     null,
   );
@@ -43,6 +45,7 @@ export default function QuestionCard({
 
   const canGoNextQuestion = currentQuestionNumber !== numOfQuestions - 1;
   const canFinish = currentQuestionNumber === numOfQuestions - 1;
+  const isLastQuestion = currentQuestionNumber === numOfQuestions - 1;
 
   return (
     <Card>
@@ -98,6 +101,9 @@ export default function QuestionCard({
           {isAnswerSubmitted && (
             <Button
               onClick={() => {
+                if (isLastQuestion) {
+                  router.push("/study");
+                }
                 if (canGoNextQuestion) {
                   next();
                   setSelectedOption(null);

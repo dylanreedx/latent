@@ -14,6 +14,8 @@ import {
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "./api/uploadthing/core";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -47,6 +49,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <nav className="flex justify-end gap-4 p-4">
+              <Link href="/study">
+                <Button variant="ghost">Study</Button>
+              </Link>
               <ModeToggle />
               <SignedOut>
                 <SignIn />
@@ -55,7 +60,10 @@ export default function RootLayout({
                 <UserButton />
               </SignedIn>
             </nav>
-            {children}
+
+            <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-12">
+              {children}
+            </main>
           </ThemeProvider>
         </body>
       </html>
