@@ -27,7 +27,7 @@ export const fileRouter = {
       console.log("file url", file.url);
       console.log(process.env.ENV);
 
-      await fetch(`${process.env.ENV}/upload-pdf`, {
+      const uploadPdf = await fetch(`${process.env.ENV}/upload-pdf`, {
         body: JSON.stringify({ url: file.url, name: v4() }),
         headers: {
           "Content-Type": "application/json",
@@ -35,8 +35,14 @@ export const fileRouter = {
         method: "POST",
       });
 
+      if (!uploadPdf.ok) {
+        throw new UploadThingError("Error uploading file");
+      }
+
+      const { text, title } = await uploadPdf.json();
+
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
+      return { uploadedBy: metadata.userId, pdfText: text, pdfName: title };
     }),
 } satisfies FileRouter;
 

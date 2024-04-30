@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { UploadDropzone } from "@/lib/uploadthing";
 import { useQuizStore } from "@/state/store";
@@ -9,6 +10,9 @@ import React from "react";
 export default function Home() {
   const router = useRouter();
   const [prompt, setPrompt] = React.useState("");
+  const [pdf, setPdf] = React.useState<{ pdfText: string; pdfName: string }[]>(
+    [],
+  );
 
   const handleGetQuiz = async () => {
     const res = await fetch("/api/study/quiz", {
@@ -46,6 +50,15 @@ export default function Home() {
             mode: "manual",
           }}
           onClientUploadComplete={(res) => {
+            res.map((r) => {
+              setPdf((prev) => [
+                ...prev,
+                {
+                  pdfText: r.serverData.pdfText,
+                  pdfName: r.serverData.pdfName,
+                },
+              ]);
+            });
             console.log("Files: ", res);
             alert("Upload Completed");
           }}
@@ -53,6 +66,20 @@ export default function Home() {
             alert(`ERROR! ${error.message}`);
           }}
         />
+
+        <ul className="flex flex-wrap gap-2">
+          {pdf.length > 0 &&
+            pdf.map((p, idx) => (
+              <li key={idx}>
+                <Card className="relative h-32 w-32 overflow-hidden p-2 text-[0.5rem]">
+                  {p.pdfText}
+                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black to-transparent p-4 font-bold">
+                    <span>{p.pdfName}.pdf</span>
+                  </div>
+                </Card>
+              </li>
+            ))}
+        </ul>
 
         <div className="flex gap-2">
           <Input
