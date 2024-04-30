@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
+import { v4 } from "uuid";
 
 const f = createUploadthing();
 
@@ -24,6 +25,15 @@ export const fileRouter = {
       console.log("Upload complete for userId:", metadata.userId);
 
       console.log("file url", file.url);
+      console.log(process.env.ENV);
+
+      await fetch(`${process.env.ENV}/upload-pdf`, {
+        body: JSON.stringify({ url: file.url, name: v4() }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };
