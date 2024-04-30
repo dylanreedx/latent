@@ -9,21 +9,45 @@ import React from "react";
 
 export default function Home() {
   const router = useRouter();
-  const [prompt, setPrompt] = React.useState("");
+  const [promptTopic, setPromptTopic] = React.useState("");
+  const [promptTimeline, setPromptTimeline] = React.useState("");
   const [pdf, setPdf] = React.useState<{ pdfText: string; pdfName: string }[]>(
     [],
   );
 
+  const suggestions = [
+    "i have a biology exam in 4 days",
+    "i have a chemistry exam in a week",
+    "i have a physics exam in a day",
+    "i have a economics exam in two days",
+    "i have a data structure and algorithms exam in two weeks",
+  ];
+
+  const topics = ["chemistry", "math", "biology", "physics", "history"];
+  const timelines = [
+    "a week",
+    "two weeks",
+    "a month",
+    "a week",
+    "a day",
+    "two days",
+    "a few days",
+  ];
+
+  // @ts-ignore This file is not being type-checked
+  const inputRegex = /i have a (?<topic>[^"]+) exam in (?<timeline>.+)/;
   const handleGetQuiz = async () => {
     const res = await fetch("/api/study/quiz", {
       method: "post",
-      body: JSON.stringify({ prompt }),
+      body: JSON.stringify({
+        prompt: `I have a ${promptTopic} exam in ${promptTimeline}`,
+      }),
     });
     if (res.ok) {
       const { questions } = await res.json();
       // store
       useQuizStore.setState((state) => (state.questions = questions));
-      router.push(`/study/${encodeURIComponent(prompt)}`);
+      router.push(`/study/${encodeURIComponent(promptTopic)}`);
       console.log(useQuizStore.getState().questions);
     }
   };
@@ -81,11 +105,26 @@ export default function Home() {
             ))}
         </ul>
 
-        <div className="flex gap-2">
-          <Input
+        <div className="flex items-center gap-2">
+          {/* <Input
             placeholder="I have an exam for ..."
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
+          /> */}
+          <h3 className="text-nowrap">I have a</h3>
+
+          <Input
+            placeholder="History, Math, Science, ..."
+            onChange={(e) => setPromptTopic(e.target.value)}
+            value={promptTopic}
+          />
+
+          <h3 className="text-nowrap">exam in</h3>
+          <Input
+            className="w-1/2"
+            placeholder="a week, 2 days, month ..."
+            onChange={(e) => setPromptTimeline(e.target.value)}
+            value={promptTimeline}
           />
           <Button
             onClick={() => {
@@ -94,6 +133,28 @@ export default function Home() {
           >
             Study
           </Button>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {suggestions.map((suggestion, idx) => (
+            <Button
+              variant="outline"
+              key={idx}
+              onClick={() => {
+                const match = inputRegex.exec(suggestion);
+                console.log("Match:", match);
+                if (match) {
+                  console.log("Groups:", match.groups);
+                  setPromptTopic(match.groups!.topic);
+                  setPromptTimeline(match.groups!.timeline);
+                  // handleGetQuiz();
+                } else {
+                  console.log("No match");
+                }
+              }}
+            >
+              {suggestion}
+            </Button>
+          ))}
         </div>
       </div>
     </div>
