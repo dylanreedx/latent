@@ -49,6 +49,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <nav className="flex justify-end gap-4 p-4">
+              <Link href="/">
+                <Button variant="ghost">Home</Button>
+              </Link>
               <Link href="/study">
                 <Button variant="ghost">Study</Button>
               </Link>
