@@ -7,8 +7,10 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { db } from "@/db/db";
+import { useQuizStore } from "@/state/store";
 import { SignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import Link from "next/link";
 
 export default async function Page() {
   const { userId } = auth();
@@ -25,18 +27,20 @@ export default async function Page() {
 
       <ul>
         {quizes.map((quiz) => (
-          <Card key={quiz.id} className="w-fit">
-            <CardHeader>
-              <CardTitle>{quiz.topic}</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
+          <Link href={`/study/${quiz.topic}`} key={quiz.id}>
+            <Card className="w-fit">
+              <CardHeader>
+                <CardTitle>{quiz.topic}</CardTitle>
+                <CardDescription>Card Description</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>Card Content</p>
+              </CardContent>
+              <CardFooter>
+                <p>Card Footer</p>
+              </CardFooter>
+            </Card>
+          </Link>
         ))}
       </ul>
     </>

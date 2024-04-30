@@ -55,7 +55,7 @@ export default function QuestionCard({
       </CardHeader>
       <CardContent>
         <ul className="flex flex-col gap-2">
-          {options.map((option, index) => (
+          {options?.map((option, index) => (
             <li key={index} className="align flex items-center gap-2">
               <span
                 onClick={() => selectOption(index)}

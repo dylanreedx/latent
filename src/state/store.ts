@@ -1,7 +1,7 @@
 import { Question } from "@/types";
 import { create } from "zustand";
 
-interface QuizStore {
+export interface QuizStore {
   numOfQuestions: number;
   currentQuestionNumber: number;
   next: () => void;
