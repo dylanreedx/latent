@@ -63,10 +63,11 @@ export default function Home() {
       <div className="flex flex-col gap-4">
         <UploadDropzone
           appearance={{
-            button: "bg-foreground text-background w-full",
+            button:
+              "ut-ready:bg-foreground ut-button:cursor-pointer ut-uploading:bg-foreground text-background w-full after:bg-background ut-readying:text-foreground",
             allowedContent: "hidden",
-            container: "border border-2 border-primary/25 rounded-md",
-            label: "text-primary",
+            container: "border border-2 border-primary/15 rounded-md",
+            label: "text-primary hover:text-muted-foreground",
             uploadIcon: "text-primary",
           }}
           endpoint="pdfUploader"
@@ -83,8 +84,6 @@ export default function Home() {
                 },
               ]);
             });
-            console.log("Files: ", res);
-            alert("Upload Completed");
           }}
           onUploadError={(error: Error) => {
             alert(`ERROR! ${error.message}`);
