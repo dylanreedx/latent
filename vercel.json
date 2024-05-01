@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/uploadthing/core.ts": {
+    "api/uploadthing/route.ts": {
       "maxDuration": 45
     }
   }
