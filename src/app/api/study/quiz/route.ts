@@ -84,6 +84,12 @@ export async function POST(request: Request) {
     input,
   });
 
+  await db.insert(quizes).values({
+    topic: q.prompt,
+    questions: JSON.stringify(questions),
+    userId,
+  });
+
   console.log("Questions:", convertToJSON(questions as string[]));
 
   return Response.json({ questions: convertToJSON(questions as string[]) });
