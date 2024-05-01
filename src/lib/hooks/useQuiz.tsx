@@ -15,10 +15,12 @@ const useQuiz = (topic: string) => {
         (quiz: any) => quiz.topic === decodeURI(topic),
       );
 
+      console.log(quizData);
+
       setQuiz({
         numOfQuestions: quizData?.questions?.length,
         currentQuestionNumber: 0,
-        questions: JSON.parse(quizData?.questions).questions,
+        questions: JSON.parse(quizData?.questions),
       });
     };
 

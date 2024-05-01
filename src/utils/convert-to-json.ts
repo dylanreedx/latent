@@ -1,4 +1,8 @@
-export function convertToJSON(questionsArray: string[]): object {
+import { Question } from "@/types";
+
+export function convertToJSON(
+  questionsArray: string[],
+): Question[] | { error: string } {
   // Join the array elements into a single string
   let questionsString = questionsArray.join("");
 
@@ -15,7 +19,8 @@ export function convertToJSON(questionsArray: string[]): object {
   // Try to parse the JSON substring. If it fails, return an error.
   try {
     let formattedQuestions = JSON.parse(jsonSubstring);
-    return { questions: formattedQuestions };
+    // return { questions: formattedQuestions };
+    return formattedQuestions;
   } catch (error) {
     console.error("Error parsing questions JSON:", error);
     return { error: "Failed to parse questions into JSON." };

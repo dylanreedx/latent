@@ -84,13 +84,19 @@ export async function POST(request: Request) {
     input,
   });
 
+  const formattedQuestions = convertToJSON(questions as string[]);
+
+  if ("error" in formattedQuestions) {
+    return Response.json(formattedQuestions, { status: 400 });
+  }
+
   await db.insert(quizes).values({
     topic: q.prompt,
-    questions: JSON.stringify(questions),
+    questions: JSON.stringify(formattedQuestions),
     userId,
   });
 
-  console.log("Questions:", convertToJSON(questions as string[]));
+  console.log("Questions:", formattedQuestions[0]);
 
-  return Response.json({ questions: convertToJSON(questions as string[]) });
+  return Response.json({ questions: formattedQuestions });
 }
