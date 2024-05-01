@@ -27,17 +27,11 @@ export const fileRouter = {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userId:", metadata.userId);
 
-      try {
         const { text, title } = await uploadPdf(file);
 
         console.log("Uploaded PDF:", title, "by", metadata.userId);
 
         return { uploadedBy: metadata.userId, pdfText: text, pdfName: title };
-        // return {uploadedBy: metadata.userId,}
-      } catch (error) {
-        console.error("Error uploading PDF:", error);
-        return "Failed to upload PDF";
-      }
     }),
 } satisfies FileRouter;
 
