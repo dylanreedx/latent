@@ -7,10 +7,14 @@ Learn and study better with AI and science.
 ### Assessments
 
 - [x] quiz from prompt
-- [ ] upload lecture slides
+- [x] upload lecture slides
 - [ ] use video lectures
 
 ### Tools
 
 - [ ] timeline
-- [ ] # of studying quizes
+- [ ] tracking # of studying quizes
+
+### Bugs
+
+- [x] slow PDF upload time
