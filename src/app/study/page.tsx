@@ -25,20 +25,17 @@ export default async function Page() {
     <>
       <h1>Study</h1>
 
-      <ul>
+      <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
         {quizes.map((quiz) => (
           <Link href={`/study/${quiz.topic}`} key={quiz.id}>
-            <Card className="w-fit">
+            <Card className="h-full w-full">
               <CardHeader>
                 <CardTitle>{quiz.topic}</CardTitle>
-                <CardDescription>Card Description</CardDescription>
+                <CardDescription>Studied 12 times</CardDescription>
               </CardHeader>
               <CardContent>
-                <p>Card Content</p>
+                <p>4 days left</p>
               </CardContent>
-              <CardFooter>
-                <p>Card Footer</p>
-              </CardFooter>
             </Card>
           </Link>
         ))}
