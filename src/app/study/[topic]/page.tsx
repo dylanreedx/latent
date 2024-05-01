@@ -1,7 +1,6 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import QuestionCard from "@/components/ui/question-card";
-import { useQuiz } from "@/lib/hooks/useQuiz";
 
 import { useQuizStore } from "@/state/store";
 import { Question } from "@/types";
@@ -10,9 +9,38 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Page({ params }: { params: { topic: string } }) {
-  const quiz = useQuiz(params.topic);
+  const { userId } = useAuth();
+  const quiz = useQuizStore((state) => state);
 
-  if (!quiz.questions) {
+  useEffect(() => {
+    const getQuiz = async () => {
+      const quizes = await fetch("/api/study/quizes", {
+        method: "GET",
+      }).then((res) => res.json());
+
+      const quiz = quizes.find(
+        (quiz: any) => quiz.topic === decodeURI(params.topic),
+      );
+
+      console.log("Quiz:", quiz);
+
+      if (!quiz) {
+        console.error("Quiz not found");
+        return;
+      }
+
+      useQuizStore.setState((state) => ({
+        ...state,
+        numOfQuestions: quiz.questions.length,
+        currentQuestionNumber: 0,
+        questions: JSON.parse(quiz.questions) as Question[],
+      }));
+    };
+
+    getQuiz();
+  }, [params.topic, userId]);
+
+  if (!quiz.questions || !quiz.questions.length) {
     return <div>Loading...</div>;
   }
 
