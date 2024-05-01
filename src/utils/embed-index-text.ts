@@ -1,6 +1,5 @@
 import {OpenAIEmbeddings} from '@langchain/openai';
 import {Index} from '@upstash/vector';
-import * as natural from 'natural';
 import pQueue from 'p-queue';
 
 const index = new Index({
@@ -28,30 +27,31 @@ export async function EmbedAndIndexText(text: string, title: string) {
   const startTime = Date.now();
   console.log(`EmbedAndIndexText started at ${startTime}`);
 
-  const tokenizer = new natural.SentenceTokenizer();
-  const chunks = tokenizer.tokenize(text);
+  const chunkSize = 4000; // adjust this value based on your requirements
+  const chunks = [];
 
-  const tokenizationTime = Date.now();
-  console.log(`Tokenization took ${tokenizationTime - startTime}ms`);
+  for (let i = 0; i < text.length; i += chunkSize) {
+    chunks.push(text.substring(i, i + chunkSize));
+  }
 
   const chunkPromises = chunks.map((chunk) => {
     return queue.add(async () => {
       const embeddingStartTime = Date.now();
       const embedding = await model.embedQuery(chunk);
       console.log(chunk);
-      return {text: chunk, vector: embedding};
+      return { text: chunk, vector: embedding };
     });
   });
 
   const embeddedChunks = await Promise.all(chunkPromises);
   const processingChunksTime = Date.now();
   console.log(
-    `Processing chunks took ${processingChunksTime - tokenizationTime}ms`
+    `Processing chunks took ${processingChunksTime - startTime}ms`
   );
 
   const vectors = embeddedChunks
     .filter(
-      (chunk): chunk is {text: string; vector: number[]} =>
+      (chunk): chunk is { text: string; vector: number[] } =>
         chunk !== undefined && chunk !== null
     )
     .map((chunk) => chunk.vector);
