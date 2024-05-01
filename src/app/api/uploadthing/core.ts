@@ -1,7 +1,10 @@
+import { downloadPdf } from "@/utils/download-pdf";
+import { EmbedAndIndexText } from "@/utils/embed-index-text";
+import { extractTextFromPDF } from "@/utils/extract-text-from-pdf";
+import { uploadPdf } from "@/utils/upload-pdf";
 import { auth } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
-import { v4 } from "uuid";
 
 const f = createUploadthing();
 
@@ -24,25 +27,17 @@ export const fileRouter = {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userId:", metadata.userId);
 
-      console.log("file url", file.url);
-      console.log(process.env.ENV);
+      try {
+        const { text, title } = await uploadPdf(file);
 
-      const uploadPdf = await fetch(`${process.env.ENV}/upload-pdf`, {
-        body: JSON.stringify({ url: file.url, name: v4() }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      });
+        console.log("Uploaded PDF:", title, "by", metadata.userId);
 
-      if (!uploadPdf.ok) {
-        throw new UploadThingError("Error uploading file");
+        return { uploadedBy: metadata.userId, pdfText: text, pdfName: title };
+        // return {uploadedBy: metadata.userId,}
+      } catch (error) {
+        console.error("Error uploading PDF:", error);
+        return "Failed to upload PDF";
       }
-
-      const { text, title } = await uploadPdf.json();
-
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId, pdfText: text, pdfName: title };
     }),
 } satisfies FileRouter;
 
