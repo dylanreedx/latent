@@ -1,6 +1,7 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import QuestionCard from "@/components/ui/question-card";
+import QuestionCardSkeleton from "@/components/ui/question-card-skeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useQuizStore } from "@/state/store";
@@ -46,24 +47,8 @@ export default function Page({ params }: { params: { topic: string } }) {
     }));
   };
 
-  if (!quiz || !quiz.questions || !quiz.questions.length) {
-    return (
-      <div className="mx-auto mt-32 flex min-h-screen max-w-3xl">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Skeleton className="h-6 w-[300px]" />
-            <Skeleton className="h-4 w-[200px]" />
-          </div>
-          <div className="space-y-2">
-            <Skeleton className="h-8 w-[450px]" />
-            <Skeleton className="h-8 w-[450px]" />
-            <Skeleton className="h-8 w-[450px]" />
-            <Skeleton className="h-8 w-[450px]" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  if (!quiz || !quiz.questions || !quiz.questions.length)
+    return <QuestionCardSkeleton />;
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-12">
