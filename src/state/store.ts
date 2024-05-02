@@ -6,6 +6,7 @@ export interface QuizStore {
   numOfQuestions: number;
   currentQuestionNumber: number;
   questions: Question[];
+  quizAttemptId: number;
 }
 
 export const useQuizStore = create<QuizStore>((set) => ({
@@ -13,4 +14,5 @@ export const useQuizStore = create<QuizStore>((set) => ({
   numOfQuestions: 0,
   currentQuestionNumber: 0,
   questions: [],
+  quizAttemptId: 0,
 }));

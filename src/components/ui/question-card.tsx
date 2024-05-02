@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useQuizStore } from "@/state/store";
 
 type QuestionCardProps = {
   question: string;
@@ -37,34 +38,74 @@ export default function QuestionCard({
     null,
   );
   const [isAnswerSubmitted, setIsAnswerSubmitted] = React.useState(false);
-  console.log("quizId", quizId);
+  const [isCorrect, setIsCorrect] = React.useState<boolean | null>(null); // added
 
-  const answerQuestion = async () => {
-    const ans = axios.post("/api/study/answer-question", {
-      question: {
-        question,
-        options,
-        answer,
-      },
+  const handleSubmitAnswer = async () => {
+    const ans = await axios.post("/api/study/answer-question", {
+      question: { question, options, answer },
       quizId,
       selectedOption,
+      quizAttemptId: useQuizStore.getState().quizAttemptId || null,
     });
-
     console.log(ans);
-  };
-
-  const selectOption = (index: number) => {
-    setSelectedOption(index);
-  };
-
-  const submitAnswer = async () => {
-    await answerQuestion();
+    useQuizStore.setState((state) => ({
+      ...state,
+      quizAttemptId: ans.data.quizAttemptId,
+    }));
     setIsAnswerSubmitted(true);
+    setIsCorrect(selectedOption === options.indexOf(answer));
   };
 
-  const canGoNextQuestion = currentQuestionNumber !== numOfQuestions - 1;
-  const canFinish = currentQuestionNumber === numOfQuestions - 1;
-  const isLastQuestion = currentQuestionNumber === numOfQuestions - 1;
+  const handleNextQuestion = async () => {
+    const quiz = useQuizStore.getState();
+    if (currentQuestionNumber === numOfQuestions - 1) {
+      try {
+        // handle last question
+        await axios.post("/api/study/finish-quiz", {
+          quizAttemptId: quiz.quizAttemptId,
+        });
+      } catch (error) {
+        console.error("Error finishing quiz", error);
+      } finally {
+        router.push("/study");
+      }
+    } else {
+      next();
+      setSelectedOption(null);
+      setIsAnswerSubmitted(false);
+      setIsCorrect(null);
+    }
+  };
+  const getOptionClassName = (index: number) => {
+    if (isAnswerSubmitted) {
+      if (selectedOption === index && options[index] !== answer) {
+        return cn(
+          "cursor-not-allowed rounded-md p-2 duration-200",
+          "bg-red-500/25 text-white",
+        );
+      } else if (selectedOption === index && options[index] === answer) {
+        return cn(
+          "cursor-not-allowed rounded-md p-2 duration-200",
+          "bg-green-500/25 text-white",
+        );
+      } else {
+        return "cursor-not-allowed rounded-md p-2 duration-200";
+      }
+    } else {
+      return cn(
+        "cursor-pointer rounded-md p-2 duration-200 hover:bg-muted-foreground/15",
+        {
+          "bg-muted-foreground/15 text-primary": selectedOption === index,
+        },
+      );
+    }
+  };
+
+  const handleSelectOption = (index: number) => {
+    if (!isAnswerSubmitted) {
+      setSelectedOption(index);
+    }
+  };
 
   return (
     <Card>
@@ -77,23 +118,8 @@ export default function QuestionCard({
           {options?.map((option, index) => (
             <li key={index} className="align flex items-center gap-2">
               <span
-                onClick={() => selectOption(index)}
-                className={cn(
-                  "cursor-pointer rounded-md p-2 duration-200 hover:bg-muted-foreground/15",
-                  {
-                    "bg-muted-foreground/15 text-primary":
-                      selectedOption === index,
-                    "bg-red-500/25 text-white":
-                      isAnswerSubmitted &&
-                      selectedOption === index &&
-                      option !== answer,
-                    "bg-green-500/25 text-white":
-                      isAnswerSubmitted &&
-                      selectedOption === index &&
-                      option === answer,
-                    "cursor-not-allowed hover:bg-inherit": isAnswerSubmitted,
-                  },
-                )}
+                onClick={() => handleSelectOption(index)}
+                className={getOptionClassName(index)}
               >
                 {option}
               </span>
@@ -107,7 +133,7 @@ export default function QuestionCard({
             {isAnswerSubmitted
               ? selectedOption === null
                 ? "Please select an option"
-                : selectedOption === options.indexOf(answer)
+                : isCorrect
                   ? "Correct!"
                   : `Incorrect. The correct answer is: ${answer}`
               : ""}
@@ -115,24 +141,15 @@ export default function QuestionCard({
         </div>
         <div className="flex w-full justify-end">
           {!isAnswerSubmitted && selectedOption !== null && (
-            <Button onClick={async () => await submitAnswer()}>Check</Button>
+            <Button onClick={handleSubmitAnswer}>Check</Button>
           )}
           {isAnswerSubmitted && (
             <Button
-              onClick={() => {
-                if (isLastQuestion) {
-                  router.push("/study");
-                }
-                if (canGoNextQuestion) {
-                  next();
-                  setSelectedOption(null);
-                  setIsAnswerSubmitted(false);
-                } else if (canFinish) {
-                  next();
-                }
-              }}
+              onClick={() =>
+                handleNextQuestion().catch((error) => console.error(error))
+              }
             >
-              {canGoNextQuestion ? "Next" : "Finish"}
+              {currentQuestionNumber === numOfQuestions - 1 ? "Finish" : "Next"}
             </Button>
           )}
         </div>

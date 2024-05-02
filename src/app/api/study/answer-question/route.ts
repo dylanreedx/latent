@@ -24,6 +24,7 @@ export async function POST(request: Request) {
   // boolean alternative for SQLite
   const isCorrect = options.indexOf(answer) === selectedOption ? 1 : 0;
 
+  // create quiz attempt
   const quizAttempt = await db
     .insert(quizAttempts)
     .values({
@@ -39,15 +40,16 @@ export async function POST(request: Request) {
     });
   }
 
-  console.log(quizAttempt);
+  await db
+    .insert(quizAttemptQuestions)
+    .values({
+      question: q,
+      quizAttemptId: quizAttempt[0].id,
+      correctAnswer: answer,
+      isCorrect,
+      userAnswer: options[selectedOption],
+    })
+    .returning();
 
-  await db.insert(quizAttemptQuestions).values({
-    question: q,
-    quizAttemptId: quizAttempt[0].id,
-    correctAnswer: answer,
-    isCorrect,
-    userAnswer: options[selectedOption],
-  });
-
-  return Response.json({ success: true });
+  return Response.json({ success: true, quizAttemptId: quizAttempt[0].id });
 }
