@@ -17,7 +17,7 @@ export default async function Page() {
   if (!userId) {
     return <SignIn />;
   }
-  const quizes = await db.query.quizes.findMany({
+  const quizes = await db.query.quizzes.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
   });
   console.log(quizes);

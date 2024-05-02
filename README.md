@@ -18,6 +18,7 @@ Learn and study better with AI and science.
 ### Bugs
 
 - [x] slow PDF upload time
+- [x] num of questions is crazy off
 
 ### Quiz Archietecture
 
@@ -27,6 +28,7 @@ Learn and study better with AI and science.
 - i want to be able to share quizzes
   - maybe a link to a quiz
   - have to think about how to handle this
+- show source/context from lecture itself?
 
 ### Dashboard
 

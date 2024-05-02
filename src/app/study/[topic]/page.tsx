@@ -22,8 +22,6 @@ export default function Page({ params }: { params: { topic: string } }) {
         (quiz: any) => quiz.topic === decodeURI(params.topic),
       );
 
-      console.log("Quiz:", quiz);
-
       if (!quiz) {
         console.error("Quiz not found");
         return;
@@ -31,7 +29,7 @@ export default function Page({ params }: { params: { topic: string } }) {
 
       useQuizStore.setState((state) => ({
         ...state,
-        numOfQuestions: quiz.questions.length,
+        numOfQuestions: JSON.parse(quiz.questions).length,
         currentQuestionNumber: 0,
         questions: JSON.parse(quiz.questions) as Question[],
       }));
@@ -39,6 +37,13 @@ export default function Page({ params }: { params: { topic: string } }) {
 
     getQuiz();
   }, [params.topic, userId]);
+
+  const next = () => {
+    useQuizStore.setState((state) => ({
+      ...state,
+      currentQuestionNumber: state.currentQuestionNumber + 1,
+    }));
+  };
 
   if (!quiz.questions || !quiz.questions.length) {
     return <div>Loading...</div>;
@@ -54,7 +59,7 @@ export default function Page({ params }: { params: { topic: string } }) {
         answer={quiz.questions[quiz.currentQuestionNumber]?.answer}
         numOfQuestions={quiz.numOfQuestions}
         currentQuestionNumber={quiz.currentQuestionNumber}
-        next={quiz.next}
+        next={next}
       />
       <Progress
         value={(quiz.currentQuestionNumber / quiz.numOfQuestions) * 100}

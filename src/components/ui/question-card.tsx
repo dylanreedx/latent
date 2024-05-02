@@ -64,11 +64,11 @@ export default function QuestionCard({
                   {
                     "bg-muted-foreground/15 text-primary":
                       selectedOption === index,
-                    "bg-red-500 text-white":
+                    "bg-red-500/25 text-white":
                       isAnswerSubmitted &&
                       selectedOption === index &&
                       option !== answer,
-                    "bg-green-500 text-white":
+                    "bg-green-500/25 text-white":
                       isAnswerSubmitted &&
                       selectedOption === index &&
                       option === answer,

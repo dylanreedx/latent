@@ -1,5 +1,5 @@
 import { db } from "@/db/db";
-import { quizes } from "@/db/schema";
+import { quizzes } from "@/db/schema";
 import { convertToJSON } from "@/utils/convert-to-json";
 import { getEmbedding } from "@/utils/get-embedding";
 import { auth } from "@clerk/nextjs/server";
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
     return Response.json(formattedQuestions, { status: 400 });
   }
 
-  await db.insert(quizes).values({
+  await db.insert(quizzes).values({
     topic: q.prompt,
     questions: JSON.stringify(formattedQuestions),
     userId,
