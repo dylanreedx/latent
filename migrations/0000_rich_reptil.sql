@@ -33,6 +33,7 @@ CREATE TABLE `quizzes` (
 	`topic` text NOT NULL,
 	`questions` text NOT NULL,
 	`orginal_quiz_id` integer,
+	`timeline` text,
 	`user_id` text NOT NULL,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

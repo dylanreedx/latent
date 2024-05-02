@@ -2,12 +2,10 @@
 import { Progress } from "@/components/ui/progress";
 import QuestionCard from "@/components/ui/question-card";
 import QuestionCardSkeleton from "@/components/ui/question-card-skeleton";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import { useQuizStore } from "@/state/store";
 import { Question } from "@/types";
 import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 export default function Page({ params }: { params: { topic: string } }) {
@@ -29,8 +27,11 @@ export default function Page({ params }: { params: { topic: string } }) {
         return;
       }
 
+      console.log(quiz);
+
       useQuizStore.setState((state) => ({
         ...state,
+        id: quiz.id,
         numOfQuestions: JSON.parse(quiz.questions).length,
         currentQuestionNumber: 0,
         questions: JSON.parse(quiz.questions) as Question[],
@@ -60,6 +61,7 @@ export default function Page({ params }: { params: { topic: string } }) {
         answer={quiz.questions[quiz.currentQuestionNumber]?.answer}
         numOfQuestions={quiz.numOfQuestions}
         currentQuestionNumber={quiz.currentQuestionNumber}
+        quizId={quiz.id}
         next={next}
       />
       <Progress

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "1123212a-68ab-4833-9f5f-84b9d74e82c1",
+  "id": "26dbf56b-e80f-4d94-a57e-77cb65996320",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "quiz_attempt_questions": {
@@ -228,6 +228,13 @@
         "orginal_quiz_id": {
           "name": "orginal_quiz_id",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "timeline": {
+          "name": "timeline",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

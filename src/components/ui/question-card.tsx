@@ -11,6 +11,7 @@ import {
 } from "./card";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 type QuestionCardProps = {
   question: string;
@@ -18,6 +19,7 @@ type QuestionCardProps = {
   answer: string;
   numOfQuestions: number;
   currentQuestionNumber: number;
+  quizId: number;
   next: () => void;
 };
 
@@ -27,6 +29,7 @@ export default function QuestionCard({
   answer,
   numOfQuestions,
   currentQuestionNumber,
+  quizId,
   next,
 }: QuestionCardProps) {
   const router = useRouter();
@@ -34,12 +37,28 @@ export default function QuestionCard({
     null,
   );
   const [isAnswerSubmitted, setIsAnswerSubmitted] = React.useState(false);
+  console.log("quizId", quizId);
+
+  const answerQuestion = async () => {
+    const ans = axios.post("/api/study/answer-question", {
+      question: {
+        question,
+        options,
+        answer,
+      },
+      quizId,
+      selectedOption,
+    });
+
+    console.log(ans);
+  };
 
   const selectOption = (index: number) => {
     setSelectedOption(index);
   };
 
-  const submitAnswer = () => {
+  const submitAnswer = async () => {
+    await answerQuestion();
     setIsAnswerSubmitted(true);
   };
 
@@ -96,7 +115,7 @@ export default function QuestionCard({
         </div>
         <div className="flex w-full justify-end">
           {!isAnswerSubmitted && selectedOption !== null && (
-            <Button onClick={submitAnswer}>Check</Button>
+            <Button onClick={async () => await submitAnswer()}>Check</Button>
           )}
           {isAnswerSubmitted && (
             <Button
