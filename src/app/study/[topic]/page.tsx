@@ -1,12 +1,13 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import QuestionCard from "@/components/ui/question-card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useQuizStore } from "@/state/store";
 import { Question } from "@/types";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 export default function Page({ params }: { params: { topic: string } }) {
   const { userId } = useAuth();
@@ -45,8 +46,23 @@ export default function Page({ params }: { params: { topic: string } }) {
     }));
   };
 
-  if (!quiz.questions || !quiz.questions.length) {
-    return <div>Loading...</div>;
+  if (!quiz || !quiz.questions || !quiz.questions.length) {
+    return (
+      <div className="mx-auto mt-32 flex min-h-screen max-w-3xl">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Skeleton className="h-6 w-[300px]" />
+            <Skeleton className="h-4 w-[200px]" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-[450px]" />
+            <Skeleton className="h-8 w-[450px]" />
+            <Skeleton className="h-8 w-[450px]" />
+            <Skeleton className="h-8 w-[450px]" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
