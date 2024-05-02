@@ -17,6 +17,7 @@ const index = new Index({
 export async function POST(request: Request) {
   type Query = {
     prompt: string;
+    timeline: string;
   };
   const { userId } = auth();
   if (!userId) {

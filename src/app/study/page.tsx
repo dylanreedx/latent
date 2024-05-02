@@ -20,7 +20,6 @@ export default async function Page() {
   const quizes = await db.query.quizzes.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
   });
-  console.log(quizes);
   return (
     <>
       <h1>Study</h1>
