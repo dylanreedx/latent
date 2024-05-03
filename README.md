@@ -2,6 +2,15 @@
 
 Learn and study better with AI and science.
 
+## Flow
+
+- [x] upload lecture slides
+- [x] input the exam topic and the timeline you have to study
+- [x] generate a quiz
+- [x] take the quiz
+  - [x] quiz logic (correct, wrong, progress)
+- [ ] review the quiz (end screen with results)
+
 ## Features
 
 ### Assessments
