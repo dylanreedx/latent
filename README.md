@@ -42,8 +42,13 @@ Learn and study better with AI and science.
 ### Dashboard
 
 - something to generate analysis
+- use space repition algorithm
 
 ### Demo/Free w/o signup
 
 - i want user to be able to use a demo version without signing up
   - maybe only a few questions?
+
+### Research
+
+- [ ] space repetition
