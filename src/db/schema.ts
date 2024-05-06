@@ -10,6 +10,8 @@ export const quizzes = sqliteTable("quizzes", {
 
   timeline: text("timeline"),
 
+  context: text("context"),
+
   userId: text("user_id").notNull(),
   createdAt: text("created_at")
     .default(sql`CURRENT_TIMESTAMP`)

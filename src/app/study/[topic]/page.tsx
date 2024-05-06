@@ -1,4 +1,5 @@
 "use client";
+import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import QuestionCard from "@/components/ui/question-card";
 import QuestionCardSkeleton from "@/components/ui/question-card-skeleton";
@@ -33,6 +34,7 @@ export default function Page({ params }: { params: { topic: string } }) {
         ...state,
         id: quiz.id,
         numOfQuestions: JSON.parse(quiz.questions).length,
+        context: quiz.context,
         currentQuestionNumber: 0,
         questions: JSON.parse(quiz.questions) as Question[],
       }));
@@ -54,6 +56,13 @@ export default function Page({ params }: { params: { topic: string } }) {
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-12">
       <h1>{decodeURI(params.topic)}</h1>
+
+      {/* {quiz.context.length > 0 && (
+        <Card className="relative mx-auto h-32 overflow-hidden p-2">
+          <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+          <span className="text-justify">{quiz.context}</span>
+        </Card>
+      )} */}
 
       <QuestionCard
         question={quiz.questions[quiz.currentQuestionNumber]?.question}

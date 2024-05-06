@@ -95,6 +95,7 @@ export async function POST(request: Request) {
     topic: q.prompt,
     questions: JSON.stringify(formattedQuestions),
     timeline: q.timeline,
+    context,
     userId,
   });
 
