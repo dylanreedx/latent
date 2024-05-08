@@ -9,6 +9,7 @@ import {
   SignedIn,
   SignedOut,
   SignIn,
+  SignInButton,
   UserButton,
 } from "@clerk/nextjs";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
@@ -50,15 +51,22 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <nav className="flex justify-end gap-4 p-4">
-              <Link href="/">
-                <Button variant="ghost">Home</Button>
-              </Link>
-              <Link href="/study">
-                <Button variant="ghost">Study</Button>
-              </Link>
+              <SignedIn>
+                <Link href="/">
+                  <Button variant="ghost">Home</Button>
+                </Link>
+                <Link href="/study">
+                  <Button variant="ghost">Study</Button>
+                </Link>
+              </SignedIn>
+
               <ModeToggle />
               <SignedOut>
-                <SignIn />
+                <SignInButton
+                  mode="modal"
+                  afterSignInUrl="/study"
+                  afterSignUpUrl="/study"
+                />
               </SignedOut>
               <SignedIn>
                 <UserButton />

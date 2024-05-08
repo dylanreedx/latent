@@ -1,7 +1,9 @@
-import { authMiddleware } from "@clerk/nextjs";
+import { authMiddleware } from "@clerk/nextjs/server";
+
+// const isProtectedRoute = createRouteMatcher(["/dashboard(.*)", "/forum(.*)"]);
 
 export default authMiddleware({
-  publicRoutes: ["/api/uploadthing"],
+  publicRoutes: ["/api/uploadthing", "/"],
   // ignoredRoutes: ["/((?!api|trpc))(_next.*|.+.[w]+$)", "/"],
 });
 

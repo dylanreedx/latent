@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@clerk/nextjs':
-    specifier: ^4.29.12
+    specifier: ^4.30.1
     version: 4.30.1(next@14.2.1)(react-dom@18.3.1)(react@18.3.1)
   '@langchain/openai':
     specifier: ^0.0.28
@@ -36,7 +36,7 @@ dependencies:
     specifier: ^6.5.1
     version: 6.5.1(next@14.2.1)(react@18.3.1)(uploadthing@6.10.1)
   '@upstash/vector':
-    specifier: ^1.0.5
+    specifier: ^1.0.7
     version: 1.0.7
   axios:
     specifier: ^1.6.8
@@ -45,16 +45,16 @@ dependencies:
     specifier: ^0.7.0
     version: 0.7.0
   clsx:
-    specifier: ^2.1.0
+    specifier: ^2.1.1
     version: 2.1.1
   dotenv:
     specifier: ^16.4.5
     version: 16.4.5
   drizzle-orm:
-    specifier: ^0.30.9
+    specifier: ^0.30.10
     version: 0.30.10(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1)
   langchain:
-    specifier: ^0.1.33
+    specifier: ^0.1.36
     version: 0.1.36(@upstash/vector@1.0.7)(axios@1.6.8)(replicate@0.29.1)
   next:
     specifier: 14.2.1
@@ -69,16 +69,16 @@ dependencies:
     specifier: ^0.0.2
     version: 0.0.2(webpack@4.47.0)
   react:
-    specifier: ^18
+    specifier: ^18.3.1
     version: 18.3.1
   react-dom:
-    specifier: ^18
+    specifier: ^18.3.1
     version: 18.3.1(react@18.3.1)
   replicate:
     specifier: ^0.29.1
     version: 0.29.1
   tailwind-merge:
-    specifier: ^2.2.2
+    specifier: ^2.3.0
     version: 2.3.0
   tailwindcss-animate:
     specifier: ^1.0.7
@@ -92,13 +92,13 @@ dependencies:
 
 devDependencies:
   '@types/node':
-    specifier: ^20
+    specifier: ^20.12.8
     version: 20.12.8
   '@types/react':
-    specifier: ^18
+    specifier: ^18.3.1
     version: 18.3.1
   '@types/react-dom':
-    specifier: ^18
+    specifier: ^18.3.0
     version: 18.3.0
   '@types/uuid':
     specifier: ^9.0.8
@@ -110,13 +110,13 @@ devDependencies:
     specifier: ^0.20.17
     version: 0.20.17
   eslint:
-    specifier: ^8
+    specifier: ^8.57.0
     version: 8.57.0
   eslint-config-next:
     specifier: 14.2.1
     version: 14.2.1(eslint@8.57.0)(typescript@5.4.5)
   postcss:
-    specifier: ^8
+    specifier: ^8.4.38
     version: 8.4.38
   prettier:
     specifier: ^3.2.5
@@ -125,10 +125,10 @@ devDependencies:
     specifier: ^0.5.14
     version: 0.5.14(prettier@3.2.5)
   tailwindcss:
-    specifier: ^3.4.1
+    specifier: ^3.4.3
     version: 3.4.3
   typescript:
-    specifier: ^5
+    specifier: ^5.4.5
     version: 5.4.5
 
 packages:
