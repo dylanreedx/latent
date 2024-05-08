@@ -1,6 +1,6 @@
-import {OpenAIEmbeddings} from '@langchain/openai';
-import {Index} from '@upstash/vector';
-import pQueue from 'p-queue';
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { Index } from "@upstash/vector";
+import pQueue from "p-queue";
 
 const index = new Index({
   url: process.env.UPSTASH_URL,
@@ -9,11 +9,11 @@ const index = new Index({
 
 const model = new OpenAIEmbeddings({
   apiKey: process.env.OPENAI_API_TOKEN,
-  model: 'text-embedding-3-small',
+  model: "text-embedding-3-small",
   dimensions: 1536,
 });
 
-const queue = new pQueue({concurrency: 5}); // adjust concurrency based on your system
+const queue = new pQueue({ concurrency: 5 }); // adjust concurrency based on your system
 
 function safeMap<T, U>(array: (T | void)[], callback: (item: T) => U): U[] {
   return array
@@ -22,7 +22,7 @@ function safeMap<T, U>(array: (T | void)[], callback: (item: T) => U): U[] {
 }
 
 export async function EmbedAndIndexText(text: string, title: string) {
-  console.log('EmbedAndIndexText started');
+  console.log("EmbedAndIndexText started");
 
   const startTime = Date.now();
   console.log(`EmbedAndIndexText started at ${startTime}`);
@@ -45,14 +45,12 @@ export async function EmbedAndIndexText(text: string, title: string) {
 
   const embeddedChunks = await Promise.all(chunkPromises);
   const processingChunksTime = Date.now();
-  console.log(
-    `Processing chunks took ${processingChunksTime - startTime}ms`
-  );
+  console.log(`Processing chunks took ${processingChunksTime - startTime}ms`);
 
   const vectors = embeddedChunks
     .filter(
       (chunk): chunk is { text: string; vector: number[] } =>
-        chunk !== undefined && chunk !== null
+        chunk !== undefined && chunk !== null,
     )
     .map((chunk) => chunk.vector);
 
@@ -65,8 +63,9 @@ export async function EmbedAndIndexText(text: string, title: string) {
 
   const calculatingAvgVectorTime = Date.now();
   console.log(
-    `Calculating average vector took ${calculatingAvgVectorTime -
-      processingChunksTime}ms`
+    `Calculating average vector took ${
+      calculatingAvgVectorTime - processingChunksTime
+    }ms`,
   );
 
   const doc = {
@@ -78,12 +77,18 @@ export async function EmbedAndIndexText(text: string, title: string) {
   };
 
   const upsertStartTime = Date.now();
-  await index.upsert([doc]);
+  try {
+    await index.upsert([doc]);
+  } catch (error) {
+    console.error("Error upserting document", error);
+    throw error;
+  }
+
   console.log(`Upserting document took ${Date.now() - upsertStartTime}ms`);
 
   const endTime = Date.now();
   console.log(
-    `EmbedAndIndexText finished at ${endTime}, took ${endTime - startTime}ms`
+    `EmbedAndIndexText finished at ${endTime}, took ${endTime - startTime}ms`,
   );
 
   return {

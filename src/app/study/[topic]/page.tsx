@@ -57,12 +57,12 @@ export default function Page({ params }: { params: { topic: string } }) {
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-12">
       <h1>{decodeURI(params.topic)}</h1>
 
-      {/* {quiz.context.length > 0 && (
+      {quiz.context.length > 0 && (
         <Card className="relative mx-auto h-32 overflow-hidden p-2">
           <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
           <span className="text-justify">{quiz.context}</span>
         </Card>
-      )} */}
+      )}
 
       <QuestionCard
         question={quiz.questions[quiz.currentQuestionNumber]?.question}

@@ -14,9 +14,16 @@ const index = new Index({
   token: process.env.UPSTASH_INDEX_TOKEN,
 });
 
+type ResultQuery = {
+  id: string;
+  score: number;
+  metadata: { text: string[] };
+};
+
 export async function POST(request: Request) {
   type Query = {
     prompt: string;
+    topic: string;
     timeline: string;
   };
   const { userId } = auth();
@@ -25,29 +32,29 @@ export async function POST(request: Request) {
   }
   const q: Query = await request.json();
   const embedding = await getEmbedding(
-    q.prompt || "What is the capital of France?",
+    q.topic || "What is the capital of France?",
   );
+  console.log("prompt", q.topic);
+  console.log("embedding", embedding);
 
-  const queryResult = await index.query({
+  const queryResult = (await index.query({
     vector: embedding,
-    topK: 5,
+    topK: 20,
     includeMetadata: true,
-  });
+  })) as ResultQuery[];
+  const top3Chunks = queryResult.slice(0, 3);
 
-  const MAX_CONTEXT_LENGTH = 2000; // Adjust this value based on your LLM's prompt size limit
-  const textChunks = queryResult
-    .flatMap((match) => match.metadata?.text || [])
-    .filter((chunk) => {
-      const c = chunk as string;
-      return c.length <= MAX_CONTEXT_LENGTH;
-    }); // Filter out chunks that exceed the maximum length
-
-  let context = textChunks.join("\n\n");
+  let context: string = top3Chunks
+    .flatMap((chunk) => chunk.metadata.text)
+    .join("\n\n");
 
   // If the context is still too large, truncate it
+  const MAX_CONTEXT_LENGTH = 8000;
   if (context.length > MAX_CONTEXT_LENGTH) {
     context = context.slice(0, MAX_CONTEXT_LENGTH) + "\n\n...";
   }
+
+  console.log(context);
 
   const prompt = `Using the following information:
 
