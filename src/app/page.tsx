@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
 import { UploadDropzone } from "@/lib/uploadthing";
 import { useQuizStore } from "@/state/store";
+import { EXAM_INPUT_PATTERN } from "@/utils/exam-pattern-match";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -38,14 +39,13 @@ export default function Home() {
     "a few days",
   ];
 
-  // @ts-ignore - matching groups should work but im being yelled at by ts
-  const EXAM_INPUT_PATTERN = /i have a (?<topic>[^"]+) exam in (?<timeline>.+)/;
   const handleGetQuiz = async () => {
     setQuizLoading(true);
     const res = await fetch("/api/study/quiz", {
       method: "post",
       body: JSON.stringify({
         prompt: `I have a ${promptState.topic} exam in ${promptState.timeline}`,
+        topic: promptState.topic,
         timeline: promptState.timeline,
       }),
     });
