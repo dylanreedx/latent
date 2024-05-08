@@ -35,13 +35,11 @@ export function SuggestionsList() {
       }
     };
 
-    suggestionsContainerRef.current.addEventListener("scroll", handleScroll);
+    const containerRef = suggestionsContainerRef.current;
+    containerRef.addEventListener("scroll", handleScroll);
 
     return () => {
-      suggestionsContainerRef.current.removeEventListener(
-        "scroll",
-        handleScroll,
-      );
+      containerRef.removeEventListener("scroll", handleScroll);
     };
   }, [suggestions, scrollDirection, scrollPosition]);
 
