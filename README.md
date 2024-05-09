@@ -22,7 +22,7 @@ Learn and study better with AI and science.
 ### Tools
 
 - [ ] timeline
-- [ ] tracking # of studying quizes
+- [ ] tracking # of studying quizzes
 
 ### Bugs
 
