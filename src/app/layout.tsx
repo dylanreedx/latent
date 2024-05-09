@@ -58,6 +58,9 @@ export default function RootLayout({
                 <Link href="/study">
                   <Button variant="ghost">Study</Button>
                 </Link>
+                <Link href="/study/quizzes">
+                  <Button variant="ghost">Quizzes</Button>
+                </Link>
               </SignedIn>
 
               <ModeToggle />

@@ -1,10 +1,9 @@
 import { Question } from "@/types";
 
 export function convertToJSON(
-  questionsArray: string[],
+  questionsString: string,
 ): Question[] | { error: string } {
   // Join the array elements into a single string
-  let questionsString = questionsArray.join("");
 
   // Find the indices of the first opening and the corresponding closing bracket
   let firstOpeningBracketIndex = questionsString.indexOf("[");

@@ -4,10 +4,10 @@ import { convertToJSON } from "@/utils/convert-to-json";
 import { getEmbedding } from "@/utils/get-embedding";
 import { auth } from "@clerk/nextjs/server";
 import { Index } from "@upstash/vector";
-import Replicate from "replicate";
+import { OpenAI } from "openai";
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_AUTH,
+const oai = new OpenAI({
+  apiKey: process.env.OPENAI_API_TOKEN,
 });
 const index = new Index({
   url: process.env.UPSTASH_URL,
@@ -88,11 +88,18 @@ export async function POST(request: Request) {
     repetition_penalty: 1,
   };
 
-  const questions = await replicate.run("meta/llama-2-7b-chat", {
-    input,
+  const oaiResponse = await oai.chat.completions.create({
+    messages: [
+      { role: "system", content: input.system_prompt },
+      { role: "user", content: input.prompt },
+    ],
+    max_tokens: 800,
+    temperature: 0.75,
+    model: "gpt-3.5-turbo-0125",
   });
 
-  const formattedQuestions = convertToJSON(questions as string[]);
+  const quiz = oaiResponse.choices[0].message.content as string;
+  const formattedQuestions = convertToJSON(quiz);
 
   if ("error" in formattedQuestions) {
     return Response.json(formattedQuestions, { status: 400 });

@@ -8,9 +8,6 @@ dependencies:
   '@clerk/nextjs':
     specifier: ^4.30.1
     version: 4.30.1(next@14.2.1)(react-dom@18.3.1)(react@18.3.1)
-  '@langchain/openai':
-    specifier: ^0.0.28
-    version: 0.0.28
   '@libsql/client':
     specifier: ^0.6.0
     version: 0.6.0
@@ -55,13 +52,16 @@ dependencies:
     version: 0.30.10(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1)
   langchain:
     specifier: ^0.1.36
-    version: 0.1.36(@upstash/vector@1.0.7)(axios@1.6.8)(replicate@0.29.1)
+    version: 0.1.36(@upstash/vector@1.0.7)(axios@1.6.8)(openai@4.43.0)
   next:
     specifier: 14.2.1
     version: 14.2.1(react-dom@18.3.1)(react@18.3.1)
   next-themes:
     specifier: ^0.3.0
     version: 0.3.0(react-dom@18.3.1)(react@18.3.1)
+  openai:
+    specifier: ^4.43.0
+    version: 4.43.0
   p-queue:
     specifier: ^8.0.1
     version: 8.0.1
@@ -74,9 +74,6 @@ dependencies:
   react-dom:
     specifier: ^18.3.1
     version: 18.3.1(react@18.3.1)
-  replicate:
-    specifier: ^0.29.1
-    version: 0.29.1
   tailwind-merge:
     specifier: ^2.3.0
     version: 2.3.0
@@ -86,6 +83,9 @@ dependencies:
   uploadthing:
     specifier: ^6.10.1
     version: 6.10.1(next@14.2.1)(tailwindcss@3.4.3)
+  zod:
+    specifier: ^3.23.8
+    version: 3.23.8
   zustand:
     specifier: ^4.5.2
     version: 4.5.2(@types/react@18.3.1)(react@18.3.1)
@@ -745,14 +745,14 @@ packages:
     engines: {node: '>=18.14.1'}
     dev: true
 
-  /@hono/zod-validator@0.2.1(hono@4.2.9)(zod@3.23.5):
+  /@hono/zod-validator@0.2.1(hono@4.2.9)(zod@3.23.8):
     resolution: {integrity: sha512-HFoxln7Q6JsE64qz2WBS28SD33UB2alp3aRKmcWnNLDzEL1BLsWfbdX6e1HIiUprHYTIXf5y7ax8eYidKUwyaA==}
     peerDependencies:
       hono: '>=3.9.0'
       zod: ^3.19.1
     dependencies:
       hono: 4.2.9
-      zod: 3.23.5
+      zod: 3.23.8
     dev: true
 
   /@humanwhocodes/config-array@0.11.14:
@@ -811,7 +811,7 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@langchain/community@0.0.53(@upstash/vector@1.0.7)(replicate@0.29.1):
+  /@langchain/community@0.0.53(@upstash/vector@1.0.7)(openai@4.43.0):
     resolution: {integrity: sha512-iFqZPt4MRssGYsQoKSXWJQaYTZCC7WNuilp2JCCs3wKmJK3l6mR0eV+PDrnT+TaDHUVxt/b0rwgM0sOiy0j2jA==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -1093,22 +1093,21 @@ packages:
       ws:
         optional: true
     dependencies:
-      '@langchain/core': 0.1.61(openai@4.40.0)
+      '@langchain/core': 0.1.61(openai@4.43.0)
       '@langchain/openai': 0.0.28
       '@upstash/vector': 1.0.7
       expr-eval: 2.0.2
       flat: 5.0.2
-      langsmith: 0.1.22(openai@4.40.0)
-      replicate: 0.29.1
+      langsmith: 0.1.22(openai@4.43.0)
       uuid: 9.0.1
-      zod: 3.23.5
-      zod-to-json-schema: 3.23.0(zod@3.23.5)
+      zod: 3.23.8
+      zod-to-json-schema: 3.23.0(zod@3.23.8)
     transitivePeerDependencies:
       - encoding
       - openai
     dev: false
 
-  /@langchain/core@0.1.61(openai@4.40.0):
+  /@langchain/core@0.1.61(openai@4.43.0):
     resolution: {integrity: sha512-C8OkAly+ugvXsL8TACCmFv9WTTcT4gvQaG6NbrXCOzibBCywfxxcTqEMOyg3zIKpxHEmR0DHqh0OiJRHocnsCg==}
     engines: {node: '>=18'}
     dependencies:
@@ -1116,14 +1115,14 @@ packages:
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.11
-      langsmith: 0.1.22(openai@4.40.0)
+      langsmith: 0.1.22(openai@4.43.0)
       ml-distance: 4.0.1
       mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
       uuid: 9.0.1
-      zod: 3.23.5
-      zod-to-json-schema: 3.23.0(zod@3.23.5)
+      zod: 3.23.8
+      zod-to-json-schema: 3.23.0(zod@3.23.8)
     transitivePeerDependencies:
       - openai
     dev: false
@@ -1132,20 +1131,20 @@ packages:
     resolution: {integrity: sha512-2s1RA3/eAnz4ahdzsMPBna9hfAqpFNlWdHiPxVGZ5yrhXsbLWWoPcF+22LCk9t0HJKtazi2GCIWc0HVXH9Abig==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.61(openai@4.40.0)
+      '@langchain/core': 0.1.61(openai@4.43.0)
       js-tiktoken: 1.0.11
-      openai: 4.40.0
-      zod: 3.23.5
-      zod-to-json-schema: 3.23.0(zod@3.23.5)
+      openai: 4.43.0
+      zod: 3.23.8
+      zod-to-json-schema: 3.23.0(zod@3.23.8)
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@langchain/textsplitters@0.0.0:
+  /@langchain/textsplitters@0.0.0(openai@4.43.0):
     resolution: {integrity: sha512-3hPesWomnmVeYMppEGYbyv0v/sRUugUdlFBNn9m1ueJYHAIKbvCErkWxNUH3guyKKYgJVrkvZoQxcd9faucSaw==}
     engines: {node: '>=18'}
     dependencies:
-      '@langchain/core': 0.1.61(openai@4.40.0)
+      '@langchain/core': 0.1.61(openai@4.43.0)
       js-tiktoken: 1.0.11
     transitivePeerDependencies:
       - openai
@@ -2880,15 +2879,6 @@ packages:
       isarray: 1.0.0
     dev: false
 
-  /buffer@6.0.3:
-    resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
-    requiresBuild: true
-    dependencies:
-      base64-js: 1.5.1
-      ieee754: 1.2.1
-    dev: false
-    optional: true
-
   /builtin-status-codes@3.0.0:
     resolution: {integrity: sha512-HpGFw18DgFWlncDfjTa2rcQ4W88O1mC8e8yZ2AvQY5KDaktSTwo+KRf6nHK6FRI5FyRyb/5T6+TSxfP7QyGsmQ==}
     dev: false
@@ -3512,7 +3502,7 @@ packages:
     dependencies:
       '@esbuild-kit/esm-loader': 2.6.5
       '@hono/node-server': 1.11.1
-      '@hono/zod-validator': 0.2.1(hono@4.2.9)(zod@3.23.5)
+      '@hono/zod-validator': 0.2.1(hono@4.2.9)(zod@3.23.8)
       camelcase: 7.0.1
       chalk: 5.3.0
       commander: 9.5.0
@@ -3526,7 +3516,7 @@ packages:
       minimatch: 7.4.6
       semver: 7.6.0
       superjson: 2.2.1
-      zod: 3.23.5
+      zod: 3.23.8
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -5296,7 +5286,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
-  /langchain@0.1.36(@upstash/vector@1.0.7)(axios@1.6.8)(replicate@0.29.1):
+  /langchain@0.1.36(@upstash/vector@1.0.7)(axios@1.6.8)(openai@4.43.0):
     resolution: {integrity: sha512-NTbnCL/jKWIeEI//Nm1oG8nhW3vkYWvEMr1MPotmTThTfeKfO87eV/OAzAyh6Ruy6GFs/qofRgQZGIe6XvXTNQ==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -5459,24 +5449,24 @@ packages:
         optional: true
     dependencies:
       '@anthropic-ai/sdk': 0.9.1
-      '@langchain/community': 0.0.53(@upstash/vector@1.0.7)(replicate@0.29.1)
-      '@langchain/core': 0.1.61(openai@4.40.0)
+      '@langchain/community': 0.0.53(@upstash/vector@1.0.7)(openai@4.43.0)
+      '@langchain/core': 0.1.61(openai@4.43.0)
       '@langchain/openai': 0.0.28
-      '@langchain/textsplitters': 0.0.0
+      '@langchain/textsplitters': 0.0.0(openai@4.43.0)
       axios: 1.6.8
       binary-extensions: 2.3.0
       js-tiktoken: 1.0.11
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
       langchainhub: 0.0.8
-      langsmith: 0.1.22(openai@4.40.0)
+      langsmith: 0.1.22(openai@4.43.0)
       ml-distance: 4.0.1
       openapi-types: 12.1.3
       p-retry: 4.6.2
       uuid: 9.0.1
       yaml: 2.4.2
-      zod: 3.23.5
-      zod-to-json-schema: 3.23.0(zod@3.23.5)
+      zod: 3.23.8
+      zod-to-json-schema: 3.23.0(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-crypto/sha256-js'
       - '@aws-sdk/client-bedrock-agent-runtime'
@@ -5553,7 +5543,7 @@ packages:
     resolution: {integrity: sha512-Woyb8YDHgqqTOZvWIbm2CaFDGfZ4NTSyXV687AG4vXEfoNo7cGQp7nhl7wL3ehenKWmNEmcxCLgOZzW8jE6lOQ==}
     dev: false
 
-  /langsmith@0.1.22(openai@4.40.0):
+  /langsmith@0.1.22(openai@4.43.0):
     resolution: {integrity: sha512-N9t9Cf1/F8DJweFMLi8Y7521gS17Cj6aqIuDQMYSnMqhOlPa8eKDo9dNcstcIax6C12XQi039/D/0tiMTS/INg==}
     peerDependencies:
       openai: '*'
@@ -5563,7 +5553,7 @@ packages:
     dependencies:
       '@types/uuid': 9.0.8
       commander: 10.0.1
-      openai: 4.40.0
+      openai: 4.43.0
       p-queue: 6.6.2
       p-retry: 4.6.2
       uuid: 9.0.1
@@ -6231,8 +6221,8 @@ packages:
     dependencies:
       wrappy: 1.0.2
 
-  /openai@4.40.0:
-    resolution: {integrity: sha512-ofh9qMxRPDSZTWYvifScusMfnyIwEQL3w+fv3ucQGn3cIn0W6Zw4vXSUod8DwYfcX/hkAx9/ZvWrdkFYnVXlmQ==}
+  /openai@4.43.0:
+    resolution: {integrity: sha512-4SMUB/XiqnO5IrEcdzEGGTcHoeXq7D/k82v36zoqSitrMUjenZXGH5JysIH7aF7Wr+gjvq0dT2mV6wLVKA7Seg==}
     hasBin: true
     dependencies:
       '@types/node': 18.19.31
@@ -6851,19 +6841,6 @@ packages:
       util-deprecate: 1.0.2
     dev: false
 
-  /readable-stream@4.5.2:
-    resolution: {integrity: sha512-yjavECdqeZ3GLXNgRXgeQEdz9fvDDkNKyHnbHRFtOr7/LcfgBcmct7t/ET+HaCTqfh06OzoAxrkN/IfjJBVe+g==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    requiresBuild: true
-    dependencies:
-      abort-controller: 3.0.0
-      buffer: 6.0.3
-      events: 3.3.0
-      process: 0.11.10
-      string_decoder: 1.3.0
-    dev: false
-    optional: true
-
   /readdirp@2.2.1:
     resolution: {integrity: sha512-1JU/8q+VgFZyxwrJ+SVIOsh+KywWGpds3NTqikiKpDMZWScmAYyKIgqkO+ARvNWJfXeXR1zxz7aHF4u4CyH6vQ==}
     engines: {node: '>=0.10'}
@@ -6931,13 +6908,6 @@ packages:
   /repeat-string@1.6.1:
     resolution: {integrity: sha512-PV0dzCYDNfRi1jCDbJzpW7jNNDRuCOG/jI5ctQcGKt/clZD+YcPS3yIlWuTJMmESC8aevCFmWJy5wjAFgNqN6w==}
     engines: {node: '>=0.10'}
-    dev: false
-
-  /replicate@0.29.1:
-    resolution: {integrity: sha512-AezrONSwjYohugcxOd334A4zijdVQ4QyGZHysB9dg7auCng2vuXbi5EFkqTX+kZ+aihxJdhO1bURYmgrxOZg2w==}
-    engines: {git: '>=2.11.0', node: '>=18.0.0', npm: '>=7.19.0', yarn: '>=1.7.0'}
-    optionalDependencies:
-      readable-stream: 4.5.2
     dev: false
 
   /resolve-from@4.0.0:
@@ -8174,16 +8144,16 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /zod-to-json-schema@3.23.0(zod@3.23.5):
+  /zod-to-json-schema@3.23.0(zod@3.23.8):
     resolution: {integrity: sha512-az0uJ243PxsRIa2x1WmNE/pnuA05gUq/JB8Lwe1EDCCL/Fz9MgjYQ0fPlyc2Tcv6aF2ZA7WM5TWaRZVEFaAIag==}
     peerDependencies:
       zod: ^3.23.3
     dependencies:
-      zod: 3.23.5
+      zod: 3.23.8
     dev: false
 
-  /zod@3.23.5:
-    resolution: {integrity: sha512-fkwiq0VIQTksNNA131rDOsVJcns0pfVUjHzLrNBiF/O/Xxb5lQyEXkhZWcJ7npWsYlvs+h0jFWXXy4X46Em1JA==}
+  /zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
   /zustand@4.5.2(@types/react@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
