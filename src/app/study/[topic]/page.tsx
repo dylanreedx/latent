@@ -7,37 +7,39 @@ import QuestionCardSkeleton from "@/components/ui/question-card-skeleton";
 import { useQuizStore } from "@/state/store";
 import { Question } from "@/types";
 import { useAuth } from "@clerk/nextjs";
+import axios from "axios";
 import React, { useEffect } from "react";
 
 export default function Page({ params }: { params: { topic: string } }) {
   const { userId } = useAuth();
   const quiz = useQuizStore((state) => state);
 
+  React.useEffect(() => {
+    useQuizStore.setState(() => ({
+      score: 0,
+    }));
+  }, []);
+
   useEffect(() => {
     const getQuiz = async () => {
-      const quizzes = await fetch("/api/study/quizzes", {
-        method: "GET",
-      }).then((res) => res.json());
+      try {
+        const { data: quiz } = await axios.post("/api/study/quizzes", {
+          topic: decodeURI(params.topic),
+        });
 
-      const quiz = quizzes.find(
-        (quiz: any) => quiz.topic === decodeURI(params.topic),
-      );
-
-      if (!quiz) {
-        console.error("Quiz not found");
-        return;
+        if (quiz && quiz.id) {
+          useQuizStore.setState((state) => ({
+            ...state,
+            id: quiz.id,
+            numOfQuestions: JSON.parse(quiz.questions).length,
+            context: quiz.context,
+            currentQuestionNumber: 0,
+            questions: JSON.parse(quiz.questions) as Question[],
+          }));
+        }
+      } catch (error) {
+        console.error(error);
       }
-
-      console.log(quiz);
-
-      useQuizStore.setState((state) => ({
-        ...state,
-        id: quiz.id,
-        numOfQuestions: JSON.parse(quiz.questions).length,
-        context: quiz.context,
-        currentQuestionNumber: 0,
-        questions: JSON.parse(quiz.questions) as Question[],
-      }));
     };
 
     getQuiz();

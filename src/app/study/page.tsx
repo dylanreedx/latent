@@ -45,7 +45,9 @@ export default function Home() {
     if (res.ok) {
       const { questions } = await res.json();
       useQuizStore.setState((state) => (state.questions = questions));
-      router.push(`/study/${encodeURIComponent(promptState.topic)}`);
+      router.push(
+        `/study/${encodeURIComponent(`I have a ${promptState.topic} exam in ${promptState.timeline}`)}`,
+      );
       setQuizLoading(false);
     }
   };
