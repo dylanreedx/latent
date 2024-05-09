@@ -17,6 +17,7 @@ import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "./api/uploadthing/core";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -50,30 +51,39 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <nav className="flex justify-end gap-4 p-4">
-              <SignedIn>
-                <Link href="/">
-                  <Button variant="ghost">Home</Button>
-                </Link>
-                <Link href="/study">
-                  <Button variant="ghost">Study</Button>
-                </Link>
-                <Link href="/study/quizzes">
-                  <Button variant="ghost">Quizzes</Button>
-                </Link>
-              </SignedIn>
+            <nav className="flex items-center justify-between gap-4 p-4">
+              <Image
+                src="/logot.svg"
+                width={100}
+                height={100}
+                alt="Latent Logo"
+              />
+              <div className="flex gap-2">
+                <SignedIn>
+                  <Link href="/">
+                    <Button variant="ghost">Home</Button>
+                  </Link>
+                  <Link href="/study">
+                    <Button variant="ghost">Study</Button>
+                  </Link>
+                  <Link href="/study/quizzes">
+                    <Button variant="ghost">Quizzes</Button>
+                  </Link>
+                </SignedIn>
 
-              <ModeToggle />
-              <SignedOut>
-                <SignInButton
-                  mode="modal"
-                  afterSignInUrl="/study"
-                  afterSignUpUrl="/study"
-                />
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
+                <ModeToggle />
+
+                <SignedOut>
+                  <SignInButton
+                    mode="modal"
+                    afterSignInUrl="/study"
+                    afterSignUpUrl="/study"
+                  />
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
             </nav>
 
             <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-12">

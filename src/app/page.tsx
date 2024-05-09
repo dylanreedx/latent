@@ -1,11 +1,19 @@
 import { SuggestionsList } from "@/components/suggestion-scroll-list";
 import { suggestions } from "@/utils/exam-suggestions";
 import { SignUpButton } from "@clerk/nextjs";
+import Image from "next/image";
 
 export default function Home() {
   return (
     <>
       <section className="mx-auto text-center">
+        <Image
+          src="/logot.svg"
+          width={150}
+          height={150}
+          alt="Latent Logo"
+          className="mx-auto my-12"
+        />
         <h1 className="mx-auto max-w-lg text-4xl font-semibold">
           Get the grades you need easier with science and AI.
         </h1>
