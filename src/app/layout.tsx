@@ -52,22 +52,33 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <nav className="flex items-center justify-between gap-4 p-4">
-              <Image
-                src="/logot.svg"
-                width={100}
-                height={100}
-                alt="Latent Logo"
-              />
+              <div className="flex items-center gap-2">
+                <Link href="/">
+                  <Image
+                    src="/logot.svg"
+                    width={100}
+                    height={100}
+                    alt="Latent Logo"
+                  />{" "}
+                </Link>
+                <Button
+                  variant="outline"
+                  className="rounded-full text-xs md:px-6"
+                >
+                  Beta
+                </Button>
+              </div>
               <div className="flex gap-2">
                 <SignedIn>
-                  <Link href="/">
-                    <Button variant="ghost">Home</Button>
-                  </Link>
                   <Link href="/study">
-                    <Button variant="ghost">Study</Button>
+                    <Button variant="ghost" className="text-xs md:text-base">
+                      Study
+                    </Button>
                   </Link>
                   <Link href="/study/quizzes">
-                    <Button variant="ghost">Quizzes</Button>
+                    <Button variant="ghost" className="text-xs md:text-base">
+                      Quizzes
+                    </Button>
                   </Link>
                 </SignedIn>
 
@@ -86,9 +97,39 @@ export default function RootLayout({
               </div>
             </nav>
 
-            <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-12">
+            <main className="mx-auto flex min-h-screen flex-col gap-12 px-6 md:max-w-xl">
               {children}
             </main>
+
+            <footer className="mt-8 bg-foreground text-background">
+              <div className="flex justify-center gap-4 p-4">
+                <Link href="#">
+                  <Button variant="ghost" className="text-xs md:text-base">
+                    Terms
+                  </Button>
+                </Link>
+                <Link href="#">
+                  <Button variant="ghost" className="text-xs md:text-base">
+                    Privacy
+                  </Button>
+                </Link>
+                <Link href="#">
+                  <Button variant="ghost" className="text-xs md:text-base">
+                    Contact
+                  </Button>
+                </Link>
+              </div>
+              <div className="flex justify-center gap-4 p-4">
+                <p className="text-xs md:text-base">
+                  built by{" "}
+                  <span className="underline">
+                    <Link href="https://x.com/dylanreedx" target="_blank">
+                      dylan
+                    </Link>
+                  </span>
+                </p>
+              </div>
+            </footer>
           </ThemeProvider>
         </body>
       </html>

@@ -16,13 +16,21 @@ export default function Home() {
   return (
     <>
       <section className="mx-auto text-center">
-        <Image
-          src="/logot.svg"
-          width={150}
-          height={150}
-          alt="Latent Logo"
-          className="mx-auto my-12"
-        />
+        <div className="my-12 space-y-2">
+          <Button
+            variant="outline"
+            className="rounded-full text-xs md:px-6 md:text-base"
+          >
+            Beta
+          </Button>
+          <Image
+            src="/logot.svg"
+            width={150}
+            height={150}
+            alt="Latent Logo"
+            className="mx-auto"
+          />
+        </div>
         <h1 className="mx-auto max-w-lg text-4xl font-semibold">
           Get the grades you need easier with science and AI.
         </h1>
