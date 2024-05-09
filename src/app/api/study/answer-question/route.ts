@@ -51,5 +51,9 @@ export async function POST(request: Request) {
     })
     .returning();
 
-  return Response.json({ success: true, quizAttemptId: quizAttempt[0].id });
+  return Response.json({
+    success: true,
+    quizAttemptId: quizAttempt[0].id,
+    isCorrect,
+  });
 }

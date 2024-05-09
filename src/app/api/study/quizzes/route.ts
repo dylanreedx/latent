@@ -6,11 +6,11 @@ export async function GET(request: Request) {
   if (!userId) {
     return new Response("Unauthorized", { status: 401 });
   }
-  const quizes = await db.query.quizzes.findMany({
+  const quizzes = await db.query.quizzes.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
   });
 
-  return Response.json(quizes, {
+  return Response.json(quizzes, {
     headers: {
       "content-type": "application/json",
     },

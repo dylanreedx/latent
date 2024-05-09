@@ -11,6 +11,8 @@ export async function POST(request: Request) {
 
   type Body = {
     quizAttemptId: number;
+    score: number;
+    maxScore: number;
   };
   const body: Body = await request.json();
 
@@ -20,6 +22,9 @@ export async function POST(request: Request) {
     .update(quizAttempts)
     .set({
       finishedAt: new Date().toISOString(),
+      score: body.score,
+      maxScore: body.maxScore,
+      grade: `${Math.round((body.score / body.maxScore) * 100)}%`,
     })
     .where(eq(quizAttempts.id, body.quizAttemptId));
 

@@ -15,11 +15,11 @@ export default function Page({ params }: { params: { topic: string } }) {
 
   useEffect(() => {
     const getQuiz = async () => {
-      const quizes = await fetch("/api/study/quizes", {
+      const quizzes = await fetch("/api/study/quizzes", {
         method: "GET",
       }).then((res) => res.json());
 
-      const quiz = quizes.find(
+      const quiz = quizzes.find(
         (quiz: any) => quiz.topic === decodeURI(params.topic),
       );
 
@@ -70,6 +70,7 @@ export default function Page({ params }: { params: { topic: string } }) {
         answer={quiz.questions[quiz.currentQuestionNumber]?.answer}
         numOfQuestions={quiz.numOfQuestions}
         currentQuestionNumber={quiz.currentQuestionNumber}
+        topic={decodeURI(params.topic)}
         quizId={quiz.id}
         next={next}
       />

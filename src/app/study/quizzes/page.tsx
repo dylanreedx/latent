@@ -17,7 +17,7 @@ export default async function Page() {
   if (!userId) {
     return <SignIn />;
   }
-  const quizes = await db.query.quizzes.findMany({
+  const quizzes = await db.query.quizzes.findMany({
     where: (model, { eq }) => eq(model.userId, userId),
   });
   return (
@@ -25,7 +25,7 @@ export default async function Page() {
       <h1>Study</h1>
 
       <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
-        {quizes.map((quiz) => (
+        {quizzes.map((quiz) => (
           <Link href={`/study/${quiz.topic}`} key={quiz.id}>
             <Card className="h-full w-full">
               <CardHeader>

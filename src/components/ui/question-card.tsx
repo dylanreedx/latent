@@ -21,6 +21,7 @@ type QuestionCardProps = {
   numOfQuestions: number;
   currentQuestionNumber: number;
   quizId: number;
+  topic: string;
   next: () => void;
 };
 
@@ -31,6 +32,7 @@ export default function QuestionCard({
   numOfQuestions,
   currentQuestionNumber,
   quizId,
+  topic,
   next,
 }: QuestionCardProps) {
   const router = useRouter();
@@ -48,12 +50,17 @@ export default function QuestionCard({
       quizAttemptId: useQuizStore.getState().quizAttemptId || null,
     });
     console.log(ans);
+
+    setIsAnswerSubmitted(true);
+    setIsCorrect(ans.data.isCorrect);
+    console.log("isCorrect", isCorrect);
     useQuizStore.setState((state) => ({
       ...state,
       quizAttemptId: ans.data.quizAttemptId,
+      score: ans.data.isCorrect ? state.score + 1 : state.score,
     }));
-    setIsAnswerSubmitted(true);
-    setIsCorrect(selectedOption === options.indexOf(answer));
+
+    console.log("score", useQuizStore.getState().score);
   };
 
   const handleNextQuestion = async () => {
@@ -63,11 +70,13 @@ export default function QuestionCard({
         // handle last question
         await axios.post("/api/study/finish-quiz", {
           quizAttemptId: quiz.quizAttemptId,
+          maxScore: numOfQuestions,
+          score: quiz.score,
         });
       } catch (error) {
         console.error("Error finishing quiz", error);
       } finally {
-        router.push("/study");
+        router.push(`/study/completed/${quiz.quizAttemptId}/${topic}`);
       }
     } else {
       next();
