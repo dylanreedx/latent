@@ -1,7 +1,16 @@
 import { SuggestionsList } from "@/components/suggestion-scroll-list";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { suggestions } from "@/utils/exam-suggestions";
 import { SignUpButton } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -44,6 +53,27 @@ export default function Home() {
           Upload your lecture slides, and we will generate quizzes and
           flashcards for you to study.
         </p>
+      </section>
+      <section>
+        <Card>
+          <CardHeader>
+            <CardDescription>Monthly subscription to Latent</CardDescription>
+            <CardTitle className="text-3xl">$8.99</CardTitle>
+            <CardDescription>
+              Study using AI by generating quizzes and flashcards from your
+              lecture slides.
+            </CardDescription>
+          </CardHeader>
+
+          <CardFooter>
+            <Link
+              href="https://buy.stripe.com/dR6eVDcu85KT0Mw9AA"
+              className="w-full"
+            >
+              <Button className="w-full">Start Studying</Button>
+            </Link>
+          </CardFooter>
+        </Card>
       </section>
     </>
   );
