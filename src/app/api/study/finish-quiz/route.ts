@@ -28,6 +28,19 @@ export async function POST(request: Request) {
     })
     .where(eq(quizAttempts.id, body.quizAttemptId));
 
+  // get all the quiz question attemps for the quiz attempt and use them for the LLM to see their performance and the understanding better
+  const questions = await db.query.quizAttemptQuestions.findMany({
+    where: (model, { eq, and, or }) =>
+      or(
+        eq(model.quizAttemptId, body.quizAttemptId),
+        eq(model.quizAttemptId, body.quizAttemptId - 3),
+        eq(model.quizAttemptId, body.quizAttemptId - 2),
+        eq(model.quizAttemptId, body.quizAttemptId - 1),
+      ),
+  });
+
+  console.log(questions);
+
   // might have to come back to this. i would rather not create a new quiz attempt every time we answer a question '/api/study/answer-question'
   await db
     .delete(quizAttempts)
