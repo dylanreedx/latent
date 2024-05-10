@@ -94,8 +94,8 @@ export default function Home() {
       <section>
         <Card>
           <CardHeader>
-            <CardDescription>Monthly subscription to Latent</CardDescription>
-            <CardTitle className="text-3xl">$8.99</CardTitle>
+            <CardDescription>Access to Latent</CardDescription>
+            <CardTitle className="text-3xl">$59.99</CardTitle>
             <CardDescription>
               Study using AI by generating quizzes and flashcards from your
               lecture slides.
@@ -104,7 +104,7 @@ export default function Home() {
 
           <CardFooter>
             <Link
-              href="https://buy.stripe.com/dR6eVDcu85KT0Mw9AA"
+              href="https://buy.stripe.com/8wM28R2Ty4GPeDm4gh"
               className="w-full"
             >
               <Button className="w-full">Start Studying</Button>
