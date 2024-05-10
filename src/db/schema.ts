@@ -60,5 +60,16 @@ export const quizShares = sqliteTable("quiz_shares", {
     .notNull(),
 });
 
+export const payment = sqliteTable("payment", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  email: text("email"),
+  type: text("type").notNull(),
+  amount: integer("amount").notNull(),
+  createdAt: text("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
 export type InsertPost = typeof quizzes.$inferInsert;
 export type SelectPost = typeof quizzes.$inferSelect;
