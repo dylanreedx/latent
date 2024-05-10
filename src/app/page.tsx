@@ -13,10 +13,17 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
+  const users = [
+    "/users/user1.jpeg",
+    "/users/user2.jpeg",
+    "/users/user3.jpeg",
+    "/users/user4.jpeg",
+    "/users/user5.jpeg",
+  ];
   return (
     <>
       <section className="mx-auto text-center">
-        <div className="my-12 space-y-2">
+        <div className="my-8 space-y-2">
           <Button
             variant="outline"
             className="rounded-full text-xs md:px-6 md:text-base"
@@ -44,6 +51,29 @@ export default function Home() {
             </button>
           </SignUpButton>
         </div>
+        <div className="relative mx-auto mt-6 w-fit">
+          <div className="absolute -right-5 z-20 h-full w-32 bg-gradient-to-l from-background to-transparent" />
+          <div className="mt-4 flex justify-center">
+            {users.map((user, key) => (
+              <Image
+                key={key}
+                src={user}
+                width={55}
+                height={55}
+                alt="User"
+                className="-mx-2 rounded-full border-4 border-background"
+              />
+            ))}
+          </div>
+          <p className="relative z-40 mt-2 text-muted-foreground">
+            and 160+ more are studying with Latent
+          </p>
+        </div>
+      </section>
+      <section className="mt-12">
+        <Card className="overflow-hidden rounded-2xl p-4 shadow-xl">
+          <video src="/demo.webm" autoPlay loop muted className="rounded-2xl" />
+        </Card>
       </section>
       <SuggestionsList />
       <section className="space-y-2 text-center">

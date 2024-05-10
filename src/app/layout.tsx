@@ -42,7 +42,7 @@ export default function RootLayout({
         <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "min-h-screen overflow-x-hidden bg-background font-sans antialiased",
             fontSans.variable,
           )}
         >
@@ -98,7 +98,7 @@ export default function RootLayout({
               </div>
             </nav>
 
-            <main className="mx-auto flex min-h-screen flex-col gap-12 px-6 md:max-w-xl">
+            <main className="mx-auto flex min-h-screen flex-col gap-12 px-6 md:max-w-4xl">
               {children}
             </main>
 

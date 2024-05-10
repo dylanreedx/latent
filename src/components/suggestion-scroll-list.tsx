@@ -44,13 +44,13 @@ export function SuggestionsList() {
   }, [suggestions, scrollDirection, scrollPosition]);
 
   return (
-    <section className="relative w-full p-16">
+    <section className="relative w-full p-16 pt-0">
       <div className="relative inline-flex w-full flex-nowrap overflow-x-hidden">
         <div className="absolute left-0 z-20 h-full  w-12 bg-gradient-to-r from-background to-transparent" />
         <div className="absolute right-0 z-20 h-full w-12 bg-gradient-to-l from-background to-transparent" />
         <div
           ref={suggestionsContainerRef}
-          className="animate-marquee-infinite flex items-center justify-center gap-4 md:justify-start"
+          className="flex animate-marquee-infinite items-center justify-center gap-4 md:justify-start"
         >
           {suggestions.map((suggestion, key) => (
             <Button key={key} variant="outline">

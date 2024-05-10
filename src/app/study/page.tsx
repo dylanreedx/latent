@@ -142,6 +142,7 @@ export default function Home() {
           {suggestions.map((suggestion, idx) => (
             <Button
               variant="outline"
+              className="text-xs md:text-base"
               key={idx}
               onClick={() => {
                 const match = EXAM_INPUT_PATTERN.exec(suggestion);
