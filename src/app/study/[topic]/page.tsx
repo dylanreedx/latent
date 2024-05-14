@@ -8,6 +8,7 @@ import { useQuizStore } from "@/state/store";
 import { Question } from "@/types";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
+import { revalidatePath } from "next/cache";
 import React, { useEffect } from "react";
 
 export default function Page({ params }: { params: { topic: string } }) {
