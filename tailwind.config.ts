@@ -80,11 +80,53 @@ export default withUt({
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0%)" },
         },
+        "come-down": {
+          from: {
+            transform: "translateY(-25%)",
+            opacity: "0",
+            filter: "blur(15px)",
+          },
+          to: { transform: "translateY(0)", opacity: "1", filter: "blur(0)" },
+        },
+        "build-skeleton": {
+          "0%": {
+            opacity: "0.5",
+            transform: "translateX(-20px)",
+            filter: "blur(10px)",
+          },
+          "20%": {
+            opacity: "1",
+            transform: "translateX(0)",
+            filter: "blur(0)",
+          },
+          "40%": {
+            opacity: "0.5",
+            transform: "translateX(-20px)",
+            filter: "blur(10px)",
+          },
+          "60%": {
+            opacity: "1",
+            transform: "translateX(0)",
+            filter: "blur(0)",
+          },
+          "80%": {
+            opacity: "0.5",
+            transform: "translateX(-20px)",
+            filter: "blur(10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0)",
+            filter: "blur(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "marquee-infinite": "marquee 400s linear infinite",
+        "come-down": "come-down 500ms ease-out",
+        "build-skeleton": "build-skeleton 3s ease-out infinite",
       },
     },
   },

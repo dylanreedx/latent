@@ -65,6 +65,14 @@ export default function Home() {
       prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic],
     );
   };
+
+  if (isGeneratingQuiz) {
+    return (
+      <div className="mx-auto">
+        <QuestionCardSkeleton />
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1 text-center">
@@ -76,36 +84,37 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col gap-4">
-        {assistedTopics.length <= 0 && (
-          <UploadDropzone
-            appearance={{
-              button:
-                "ut-ready:bg-foreground ut-button:cursor-pointer ut-uploading:bg-foreground text-background w-full after:bg-background ut-readying:text-foreground",
-              allowedContent: "hidden",
-              container: "border border-2 border-primary/15 rounded-md",
-              label: "text-primary hover:text-muted-foreground",
-              uploadIcon: "text-primary",
-            }}
-            endpoint="pdfUploader"
-            config={{
-              mode: "manual",
-            }}
-            onClientUploadComplete={(res) => {
-              res.map((r) => {
-                setPdf((prev) => [
-                  ...prev,
-                  {
-                    pdfText: r.serverData.pdfText,
-                    pdfName: r.serverData.pdfName,
-                  },
-                ]);
-              });
-            }}
-            onUploadError={(error: Error) => {
-              alert(`ERROR! ${error.message}`);
-            }}
-          />
-        )}
+        {isAssistantLoading ||
+          (assistedTopics.length <= 0 && (
+            <UploadDropzone
+              appearance={{
+                button:
+                  "ut-ready:bg-foreground ut-button:cursor-pointer ut-uploading:bg-foreground text-background w-full after:bg-background ut-readying:text-foreground",
+                allowedContent: "hidden",
+                container: "border border-2 border-primary/15 rounded-md",
+                label: "text-primary hover:text-muted-foreground",
+                uploadIcon: "text-primary",
+              }}
+              endpoint="pdfUploader"
+              config={{
+                mode: "manual",
+              }}
+              onClientUploadComplete={(res) => {
+                res.map((r) => {
+                  setPdf((prev) => [
+                    ...prev,
+                    {
+                      pdfText: r.serverData.pdfText,
+                      pdfName: r.serverData.pdfName,
+                    },
+                  ]);
+                });
+              }}
+              onUploadError={(error: Error) => {
+                alert(`ERROR! ${error.message}`);
+              }}
+            />
+          ))}
 
         <ul className="flex flex-wrap gap-2">
           {pdf.length > 0 &&
@@ -164,16 +173,16 @@ export default function Home() {
         {assistedTopics.length > 0 && !isGeneratingQuiz && (
           <Card className="mt-4 space-y-4 p-6">
             <div>
-              <h3 className="text-lg">
+              <h3 className="text-base md:text-lg">
                 Let&apos;s dial in what you need to study
               </h3>
-              <p className="text-foreground/80">
+              <p className="text-sm text-foreground/80 md:text-base">
                 Skip or select topics to generate the most efficient quiz for
                 you. It is best to dial in the topics you need to study to get a
                 more efficient quiz.
               </p>
             </div>
-            <ul className="flex flex-wrap gap-2">
+            <ul className="flex flex-wrap gap-2 text-sm md:text-base">
               {assistedTopics.map((topic, idx) => (
                 <li key={idx}>
                   <Button
@@ -200,11 +209,6 @@ export default function Home() {
               </Button>
             </div>
           </Card>
-        )}
-        {isGeneratingQuiz && (
-          <div className="mx-auto">
-            <QuestionCardSkeleton />
-          </div>
         )}
       </div>
     </div>
