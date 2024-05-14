@@ -169,7 +169,8 @@ export default function Home() {
               </h3>
               <p className="text-foreground/80">
                 Skip or select topics to generate the most efficient quiz for
-                you.
+                you. It is best to dial in the topics you need to study to get a
+                more efficient quiz.
               </p>
             </div>
             <ul className="flex flex-wrap gap-2">
@@ -190,7 +191,11 @@ export default function Home() {
               <Button className="w-full" onClick={handleGetQuiz}>
                 Generate Quiz
               </Button>
-              <Button className="w-full" variant="ghost">
+              <Button
+                className="w-full"
+                variant="ghost"
+                onClick={handleGetQuiz}
+              >
                 Skip
               </Button>
             </div>
