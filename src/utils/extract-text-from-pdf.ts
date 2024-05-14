@@ -1,7 +1,13 @@
+import { db } from "@/db/db";
+import { pdfData } from "@/db/schema";
 import fs from "fs";
 import { pdfToText } from "pdf-ts";
 
-export async function extractTextFromPDF(pdfFilePath: string, title: string) {
+export async function extractTextFromPDF(
+  pdfFilePath: string,
+  title: string,
+  userId: string,
+) {
   const pdf = fs.readFileSync(pdfFilePath);
   const text = await pdfToText(pdf);
 
@@ -19,6 +25,12 @@ export async function extractTextFromPDF(pdfFilePath: string, title: string) {
     .replace(//g, "") // clean this charcter up: 
     .trim()
     .toLowerCase();
+
+  await db.insert(pdfData).values({
+    id: title,
+    userId,
+    text: cleanedText,
+  });
 
   return { text: cleanedText, title };
 }

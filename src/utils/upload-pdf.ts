@@ -6,7 +6,7 @@ type File = {
   name: string;
   url: string;
 };
-export async function uploadPdf(file: File) {
+export async function uploadPdf(file: File, userId: string) {
   console.log("file:", file);
 
   console.time("upload-pdf");
@@ -14,10 +14,18 @@ export async function uploadPdf(file: File) {
   const pdfFilePath = await downloadPdf(file.url, file.name);
   console.timeLog("upload-pdf", "Downloaded PDF");
 
-  const { text, title } = await extractTextFromPDF(pdfFilePath, file.name);
+  const { text, title } = await extractTextFromPDF(
+    pdfFilePath,
+    file.name,
+    userId,
+  );
   console.timeLog("upload-pdf", "Extracted text from PDF");
 
-  await EmbedAndIndexText(text, title);
+  try {
+    await EmbedAndIndexText(text, title);
+  } catch (error) {
+    console.error("Error embedding and indexing text:", error);
+  }
   console.timeLog("upload-pdf", "Embedded and indexed text");
 
   console.timeEnd("upload-pdf");

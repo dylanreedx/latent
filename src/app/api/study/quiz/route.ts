@@ -1,5 +1,5 @@
 import { db } from "@/db/db";
-import { quizAttempts, quizzes } from "@/db/schema";
+import { pdfData, quizAttempts, quizzes } from "@/db/schema";
 import { convertToJSON } from "@/utils/convert-to-json";
 import { getEmbedding } from "@/utils/get-embedding";
 import { auth } from "@clerk/nextjs/server";
@@ -52,6 +52,17 @@ export async function POST(request: Request) {
   const MAX_CONTEXT_LENGTH = 8000;
   if (context.length > MAX_CONTEXT_LENGTH) {
     context = context.slice(0, MAX_CONTEXT_LENGTH) + "\n\n...";
+  }
+
+  // Fetch context from pdfData table if not available in vector database
+  if (!context) {
+    const chunkId = top3Chunks[0].id; // Get the id from the first chunk
+    const pdf = await db.query.pdfData.findFirst({
+      where: (model, { eq }) => eq(model.id, chunkId),
+    });
+    if (pdf && pdf.text) {
+      context = pdf.text;
+    }
   }
 
   console.log(context);

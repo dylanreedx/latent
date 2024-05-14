@@ -60,6 +60,15 @@ export const quizShares = sqliteTable("quiz_shares", {
     .notNull(),
 });
 
+export const pdfData = sqliteTable("pdf_data", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  text: text("text").notNull(),
+  createdAt: text("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
 export const payment = sqliteTable("payment", {
   id: integer("id").primaryKey(),
   userId: text("user_id").notNull(),

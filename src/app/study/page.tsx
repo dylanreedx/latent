@@ -90,7 +90,6 @@ export default function Home() {
               appearance={{
                 button:
                   "ut-ready:bg-foreground ut-button:cursor-pointer ut-uploading:bg-foreground text-background w-full after:bg-background ut-readying:text-foreground",
-                allowedContent: "hidden",
                 container: "border border-2 border-primary/15 rounded-md",
                 label: "text-primary hover:text-muted-foreground",
                 uploadIcon: "text-primary",

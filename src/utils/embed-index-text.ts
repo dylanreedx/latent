@@ -15,10 +15,27 @@ const model = new OpenAIEmbeddings({
 
 const queue = new pQueue({ concurrency: 5 }); // adjust concurrency based on your system
 
-function safeMap<T, U>(array: (T | void)[], callback: (item: T) => U): U[] {
+function safeMap<T, U>(
+  array: (T | void)[],
+  callback: (item: T) => U,
+  maxLength: number = 45000,
+): U[] {
   return array
     .filter((item): item is T => item !== undefined && item !== null)
-    .map(callback);
+    .map((item) => {
+      const result = callback(item);
+      if (typeof result === "string" && result.length > maxLength) {
+        return result.substring(0, maxLength) as U; // Add the type assertion
+      }
+      return result;
+    });
+}
+
+function safeString(str: string, maxLength: number = 2000): string {
+  if (str.length > maxLength) {
+    return str.substring(0, maxLength);
+  }
+  return str;
 }
 
 export async function EmbedAndIndexText(text: string, title: string) {
@@ -71,7 +88,15 @@ export async function EmbedAndIndexText(text: string, title: string) {
   const doc = {
     id: title,
     metadata: {
-      text: safeMap(embeddedChunks, (chunk) => chunk.text),
+      text: safeString(
+        embeddedChunks
+          .filter(
+            (chunk): chunk is { text: string; vector: number[] } =>
+              chunk !== undefined && chunk !== null,
+          )
+          .map((chunk) => chunk.text)
+          .join("\n\n"),
+      ),
     },
     vector: avgVector,
   };
