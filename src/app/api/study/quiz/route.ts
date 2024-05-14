@@ -61,6 +61,8 @@ export async function POST(request: Request) {
       Here is context from the student's lecture slides:
       ${context}
 
+      If the context isn't sufficient, you can generate a quiz with information you think is relevant to the topic.
+
       Create 3 multiple-choice questions about ${q.prompt}. Each question should have 4 answer options. Format the questions and answers as a JSON array like this:
 
       [
