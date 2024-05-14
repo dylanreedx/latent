@@ -53,7 +53,11 @@ export default function Page({ params }: { params: { topic: string } }) {
   };
 
   if (!quiz || !quiz.questions || !quiz.questions.length)
-    return <QuestionCardSkeleton />;
+    return (
+      <div className="mx-auto">
+        <QuestionCardSkeleton />
+      </div>
+    );
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-12">

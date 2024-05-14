@@ -117,7 +117,7 @@ export default function QuestionCard({
   };
 
   return (
-    <Card>
+    <Card className="animate-come-down">
       <CardHeader>
         <CardTitle>{question}</CardTitle>
         <CardDescription>Click an option</CardDescription>
