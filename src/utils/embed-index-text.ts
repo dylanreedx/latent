@@ -105,8 +105,7 @@ export async function EmbedAndIndexText(text: string, title: string) {
   try {
     await index.upsert([doc]);
   } catch (error) {
-    console.error("Error upserting document", error);
-    throw error;
+    console.dir(error);
   }
 
   console.log(`Upserting document took ${Date.now() - upsertStartTime}ms`);

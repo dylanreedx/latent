@@ -95,10 +95,8 @@ export default function Home() {
                 uploadIcon: "text-primary",
               }}
               endpoint="pdfUploader"
-              config={{
-                mode: "manual",
-              }}
               onClientUploadComplete={(res) => {
+                console.log("done?");
                 res.map((r) => {
                   setPdf((prev) => [
                     ...prev,
