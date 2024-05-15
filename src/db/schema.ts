@@ -14,7 +14,7 @@ export const quizzes = sqliteTable("quizzes", {
 
   userId: text("user_id").notNull(),
   createdAt: text("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
 });
 
@@ -32,7 +32,7 @@ export const quizAttempts = sqliteTable("quiz_attempts", {
   grade: text("grade"), // e.g., "80%" or "8/10"
 
   startedAt: text("started_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
   finishedAt: text("finished_at"),
 });
@@ -56,7 +56,7 @@ export const quizShares = sqliteTable("quiz_shares", {
     .references(() => quizzes.id, { onDelete: "cascade" }),
   shareToken: text("share_token").notNull(), // unique, random token for sharing
   createdAt: text("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
 });
 
@@ -65,7 +65,7 @@ export const pdfData = sqliteTable("pdf_data", {
   userId: text("user_id").notNull(),
   text: text("text").notNull(),
   createdAt: text("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
 });
 
@@ -77,6 +77,18 @@ export const payment = sqliteTable("payment", {
   amount: integer("amount").notNull(),
   createdAt: text("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const youtubeVideo = sqliteTable("youtube_video", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  videoId: text("video_id").notNull(),
+  title: text("title").notNull(),
+  transcript: text("transcript").notNull(),
+  summarizedTranscript: text("summarized_transcript"),
+  createdAt: text("created_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
 });
 
