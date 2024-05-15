@@ -4,11 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import QuestionCardSkeleton from "@/components/ui/question-card-skeleton";
+import { Separator } from "@/components/ui/separator";
 import Spinner from "@/components/ui/spinner";
 import SuggestionsList from "@/components/ui/suggestions-list";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UploadDropzone } from "@/lib/uploadthing";
 import { useQuizStore } from "@/state/store";
 import { EXAM_INPUT_PATTERN } from "@/utils/exam-pattern-match";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -25,6 +28,13 @@ export default function Home() {
   );
   const [assistedTopics, setAssistedTopics] = React.useState<string[]>([]);
   const [selectedTopics, setSelectedTopics] = React.useState<string[]>([]);
+
+  const [videoUrl, setVideoUrl] = React.useState("");
+  const [isUploadTranscriptLoading, setIsUploadTranscriptLoading] =
+    React.useState(false);
+  const [isUploadingTranscriptDone, setIsUploadingTranscriptDone] =
+    React.useState(false);
+  const [transcriptHtml, setTranscriptHtml] = React.useState("");
 
   const handleQuizAssistant = async () => {
     setIsAssistantLoading(true);
@@ -60,6 +70,20 @@ export default function Home() {
       );
     }
   };
+
+  const handleTranscribe = async (url: string) => {
+    setIsUploadTranscriptLoading(true);
+    try {
+      const res = await axios.post("/api/upload-yt", { videoUrl: url });
+
+      setTranscriptHtml(res.data.transcriptHtml);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUploadTranscriptLoading(false);
+      setIsUploadingTranscriptDone(true);
+    }
+  };
   const handleSelectTopics = (topic: string) => {
     setSelectedTopics((prev) =>
       prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic],
@@ -83,131 +107,169 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-4">
-        {isAssistantLoading ||
-          (assistedTopics.length <= 0 && (
-            <UploadDropzone
-              appearance={{
-                button:
-                  "ut-ready:bg-foreground ut-button:cursor-pointer ut-uploading:bg-foreground text-background w-full after:bg-background ut-readying:text-foreground",
-                container: "border border-2 border-primary/15 rounded-md",
-                label: "text-primary hover:text-muted-foreground",
-                uploadIcon: "text-primary",
-              }}
-              endpoint="pdfUploader"
-              onClientUploadComplete={(res) => {
-                console.log("done?");
-                res.map((r) => {
-                  setPdf((prev) => [
-                    ...prev,
-                    {
-                      pdfText: r.serverData.pdfText,
-                      pdfName: r.serverData.pdfName,
-                    },
-                  ]);
-                });
-              }}
-              onUploadError={(error: Error) => {
-                alert(`ERROR! ${error.message}`);
-              }}
-            />
-          ))}
-
-        <ul className="flex flex-wrap gap-2">
-          {pdf.length > 0 &&
-            pdf.map((p, idx) => (
-              <li key={idx}>
-                <Card className="relative h-32 w-32 overflow-hidden p-2 text-[0.5rem]">
-                  {p.pdfText}
-                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black to-transparent p-4 font-bold">
-                    <span>{p.pdfName}.pdf</span>
-                  </div>
-                </Card>
-              </li>
-            ))}
-        </ul>
-
-        <div className="flex items-center gap-2">
-          <h3 className="text-nowrap">I have a</h3>
-
-          <Input
-            placeholder="History, Math, Science, ..."
-            onChange={(e) => {
-              setPromptState((prev) => ({
-                ...prev,
-                topic: e.target.value,
-              }));
-            }}
-            value={promptState.topic}
-          />
-
-          <h3 className="text-nowrap">exam in</h3>
-          <Input
-            className="w-1/2"
-            placeholder="a week, 2 days, month ..."
-            onChange={(e) => {
-              setPromptState((prev) => ({
-                ...prev,
-                timeline: e.target.value,
-              }));
-            }}
-            value={promptState.timeline}
-          />
-          {assistedTopics.length <= 0 && (
-            <Button
-              onClick={() => {
-                handleQuizAssistant();
-              }}
-            >
-              Study
-            </Button>
-          )}
-        </div>
-        {!isAssistantLoading && assistedTopics.length <= 0 && (
-          <SuggestionsList setPromptState={setPromptState} />
-        )}
-        {isAssistantLoading && <AssistantSkeleton />}
-        {assistedTopics.length > 0 && !isGeneratingQuiz && (
-          <Card className="mt-4 space-y-4 p-6">
-            <div>
-              <h3 className="text-base md:text-lg">
-                Let&apos;s dial in what you need to study
-              </h3>
-              <p className="text-sm text-foreground/80 md:text-base">
-                Skip or select topics to generate the most efficient quiz for
-                you. It is best to dial in the topics you need to study to get a
-                more efficient quiz.
-              </p>
-            </div>
-            <ul className="flex flex-wrap gap-2 text-sm md:text-base">
-              {assistedTopics.map((topic, idx) => (
-                <li key={idx}>
-                  <Button
-                    variant={
-                      selectedTopics.includes(topic) ? "default" : "outline"
-                    }
-                    onClick={() => handleSelectTopics(topic)}
-                  >
-                    {topic}
-                  </Button>
-                </li>
+      <Tabs defaultValue="pdf" className="w-full">
+        <TabsList className="w-full">
+          <TabsTrigger value="pdf" className="flex-1">
+            PDF
+          </TabsTrigger>
+          <TabsTrigger value="yt" className="flex-1">
+            YouTube
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="pdf">
+          <div className="flex flex-col gap-4">
+            {isAssistantLoading ||
+              (assistedTopics.length <= 0 && (
+                <UploadDropzone
+                  appearance={{
+                    button:
+                      "ut-ready:bg-foreground ut-button:cursor-pointer ut-uploading:bg-foreground text-background w-full after:bg-background ut-readying:text-foreground",
+                    container: "border border-2 border-primary/15 rounded-md",
+                    label: "text-primary hover:text-muted-foreground",
+                    uploadIcon: "text-primary",
+                  }}
+                  endpoint="pdfUploader"
+                  onClientUploadComplete={(res) => {
+                    console.log("done?");
+                    res.map((r) => {
+                      setPdf((prev) => [
+                        ...prev,
+                        {
+                          pdfText: r.serverData.pdfText,
+                          pdfName: r.serverData.pdfName,
+                        },
+                      ]);
+                    });
+                  }}
+                  onUploadError={(error: Error) => {
+                    alert(`ERROR! ${error.message}`);
+                  }}
+                />
               ))}
+
+            <ul className="flex flex-wrap gap-2">
+              {pdf.length > 0 &&
+                pdf.map((p, idx) => (
+                  <li key={idx}>
+                    <Card className="relative h-32 w-32 overflow-hidden p-2 text-[0.5rem]">
+                      {p.pdfText}
+                      <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black to-transparent p-4 font-bold">
+                        <span>{p.pdfName}.pdf</span>
+                      </div>
+                    </Card>
+                  </li>
+                ))}
             </ul>
-            <div className="space-y-2">
-              <Button className="w-full" onClick={handleGetQuiz}>
-                Generate Quiz
-              </Button>
-              <Button
-                className="w-full"
-                variant="ghost"
-                onClick={handleGetQuiz}
-              >
-                Skip
-              </Button>
-            </div>
-          </Card>
+          </div>
+        </TabsContent>
+        <TabsContent value="yt">
+          <div className="flex flex-col gap-2">
+            <Input
+              placeholder="https://www.youtube.com/watch?v=..."
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+            />
+            <Button
+              onClick={() => handleTranscribe(videoUrl)}
+              disabled={isUploadingTranscriptDone}
+            >
+              {isUploadTranscriptLoading ? (
+                <Spinner />
+              ) : isUploadingTranscriptDone ? (
+                "Uploaded"
+              ) : (
+                "Transcribe Video"
+              )}
+            </Button>
+            {transcriptHtml.length > 0 && (
+              <Card className="relative">
+                <div className="absolute inset-0 flex items-end bg-gradient-to-t from-background to-transparent p-4 font-bold" />
+                <div
+                  dangerouslySetInnerHTML={{ __html: transcriptHtml }}
+                  className="prose h-60 max-w-none overflow-hidden p-4 [&>article>h1]:mb-4 [&>article>h1]:font-bold [&>article>h2]:mb-4 [&>article>h2]:font-semibold [&>article>h3]:mb-4 [&>article>h3]:font-medium [&>article>ol>li]:list-inside [&>article>ol>li]:pl-4 [&>article>ol]:list-decimal [&>article>p]:mb-4 [&>article>ul>li]:mb-2 [&>article>ul>li]:list-inside [&>article>ul>li]:pl-4 [&>article>ul]:list-disc"
+                ></div>
+              </Card>
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
+      <Separator className="my-4" />
+      <div className="flex items-center gap-2">
+        <h3 className="text-nowrap">I have a</h3>
+
+        <Input
+          placeholder="History, Math, Science, ..."
+          onChange={(e) => {
+            setPromptState((prev) => ({
+              ...prev,
+              topic: e.target.value,
+            }));
+          }}
+          value={promptState.topic}
+        />
+
+        <h3 className="text-nowrap">exam in</h3>
+        <Input
+          className="w-1/2"
+          placeholder="a week, 2 days, month ..."
+          onChange={(e) => {
+            setPromptState((prev) => ({
+              ...prev,
+              timeline: e.target.value,
+            }));
+          }}
+          value={promptState.timeline}
+        />
+        {assistedTopics.length <= 0 && (
+          <Button
+            onClick={() => {
+              handleQuizAssistant();
+            }}
+          >
+            Study
+          </Button>
         )}
       </div>
+      {!isAssistantLoading && assistedTopics.length <= 0 && (
+        <SuggestionsList setPromptState={setPromptState} />
+      )}
+      {isAssistantLoading && <AssistantSkeleton />}
+      {assistedTopics.length > 0 && !isGeneratingQuiz && (
+        <Card className="mt-4 space-y-4 p-6">
+          <div>
+            <h3 className="text-base md:text-lg">
+              Let&apos;s dial in what you need to study
+            </h3>
+            <p className="text-sm text-foreground/80 md:text-base">
+              Skip or select topics to generate the most efficient quiz for you.
+              It is best to dial in the topics you need to study to get a more
+              efficient quiz.
+            </p>
+          </div>
+          <ul className="flex flex-wrap gap-2 text-sm md:text-base">
+            {assistedTopics.map((topic, idx) => (
+              <li key={idx}>
+                <Button
+                  variant={
+                    selectedTopics.includes(topic) ? "default" : "outline"
+                  }
+                  onClick={() => handleSelectTopics(topic)}
+                >
+                  {topic}
+                </Button>
+              </li>
+            ))}
+          </ul>
+          <div className="space-y-2">
+            <Button className="w-full" onClick={handleGetQuiz}>
+              Generate Quiz
+            </Button>
+            <Button className="w-full" variant="ghost" onClick={handleGetQuiz}>
+              Skip
+            </Button>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }
