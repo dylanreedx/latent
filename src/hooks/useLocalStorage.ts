@@ -1,18 +1,17 @@
-import { useState, useEffect } from "react";
-
-interface UseLocalStorageOptions<T> {
-  key: string;
-  initialValue: T;
-}
+import { useLayoutEffect, useState } from "react";
 
 const useLocalStorage = <T>(
   key: string,
   initialValue: T,
 ): [T, (value: T) => void] => {
-  const [value, setValue] = useState<T>(() => {
+  const [value, setValue] = useState<T>(initialValue);
+
+  useLayoutEffect(() => {
     const storedValue = localStorage.getItem(key);
-    return storedValue ? JSON.parse(storedValue) : initialValue;
-  });
+    if (storedValue) {
+      setValue(JSON.parse(storedValue));
+    }
+  }, [key]);
 
   const updateLocalStorage = (newValue: T) => {
     localStorage.setItem(key, JSON.stringify(newValue));
