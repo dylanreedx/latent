@@ -1,3 +1,4 @@
+"use client";
 import { SuggestionsList } from "@/components/suggestion-scroll-list";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,11 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { suggestions } from "@/utils/exam-suggestions";
-import { SignUpButton } from "@clerk/nextjs";
+import { SignUpButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
+  const { user } = useUser();
   const users = [
     "/users/user1.jpeg",
     "/users/user2.jpeg",
@@ -104,7 +106,11 @@ export default function Home() {
 
           <CardFooter>
             <Link
-              href="https://buy.stripe.com/8wM28R2Ty4GPeDm4gh"
+              href={
+                "https://buy.stripe.com/8wM28R2Ty4GPeDm4gh" +
+                "?prefilled_email=" +
+                user?.primaryEmailAddress?.emailAddress
+              }
               className="w-full"
             >
               <Button className="w-full">Start Studying</Button>
