@@ -9,7 +9,7 @@ Learn and study better with AI and science.
 - [x] generate a quiz
 - [x] take the quiz
   - [x] quiz logic (correct, wrong, progress)
-- [ ] review the quiz (end screen with results)
+- [x] review the quiz (end screen with results)
 
 ## Features
 
@@ -17,12 +17,12 @@ Learn and study better with AI and science.
 
 - [x] quiz from prompt
 - [x] upload lecture slides
-- [ ] use video lectures
+- [x] use video lectures
 
 ### Tools
 
 - [ ] timeline
-- [ ] tracking # of studying quizzes
+- [x] tracking # of studying quizzes
 
 ### Bugs
 
