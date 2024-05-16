@@ -48,9 +48,9 @@ export default function Home() {
         </p>
         <div className="mt-6">
           <SignUpButton afterSignInUrl="/study" afterSignUpUrl="/study">
-            <button className="cursor-pointer rounded-lg bg-foreground px-12 py-4 font-semibold text-background">
-              Start Studying
-            </button>
+            <Button className="px-12 py-6 font-semibold" size="lg">
+              Start Studying It&apos;s Free
+            </Button>
           </SignUpButton>
         </div>
         <div className="relative mx-auto mt-6 w-fit">
@@ -96,24 +96,33 @@ export default function Home() {
       <section>
         <Card>
           <CardHeader>
-            <CardDescription>Access to Latent</CardDescription>
-            <CardTitle className="text-3xl">$59.99</CardTitle>
+            <CardDescription>Lifetime Access to Latent</CardDescription>
+            <div className="flex gap-2">
+              <CardTitle className="text-3xl">$12.99</CardTitle>
+              <div>
+                <span className="text-muted-foreground line-through">
+                  $49.99
+                </span>
+              </div>
+            </div>
             <CardDescription>
-              Study using AI by generating quizzes and flashcards from your
-              lecture slides.
+              Generate unlimited quizzes and flashcards and study with the most
+              effieciency using AI.
             </CardDescription>
           </CardHeader>
 
           <CardFooter>
             <Link
               href={
-                "https://buy.stripe.com/8wM28R2Ty4GPeDm4gh" +
+                "https://buy.stripe.com/8wM6p72Ty6OX66QcMO" +
                 "?prefilled_email=" +
                 user?.primaryEmailAddress?.emailAddress
               }
               className="w-full"
             >
-              <Button className="w-full">Start Studying</Button>
+              <Button className="w-full" size="lg">
+                Start Studying
+              </Button>
             </Link>
           </CardFooter>
         </Card>
