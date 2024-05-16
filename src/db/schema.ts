@@ -30,6 +30,7 @@ export const quizAttempts = sqliteTable("quiz_attempts", {
   score: integer("score"),
   maxScore: integer("max_score"),
   grade: text("grade"), // e.g., "80%" or "8/10"
+  report: text("report"),
 
   startedAt: text("started_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
@@ -76,7 +77,7 @@ export const payment = sqliteTable("payment", {
   type: text("type").notNull(),
   amount: integer("amount").notNull(),
   createdAt: text("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
 });
 

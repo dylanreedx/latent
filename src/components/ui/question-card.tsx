@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useQuizStore } from "@/state/store";
+import Spinner from "./spinner";
 
 type QuestionCardProps = {
   question: string;
@@ -42,6 +43,8 @@ export default function QuestionCard({
   const [isAnswerSubmitted, setIsAnswerSubmitted] = React.useState(false);
   const [isCorrect, setIsCorrect] = React.useState<boolean | null>(null); // added
 
+  const [isFinishQuizLoading, setIsFinishQuizLoading] = React.useState(false);
+
   const handleSubmitAnswer = async () => {
     const ans = await axios.post("/api/study/answer-question", {
       question: { question, options, answer },
@@ -66,12 +69,14 @@ export default function QuestionCard({
   const handleNextQuestion = async () => {
     const quiz = useQuizStore.getState();
     if (currentQuestionNumber === numOfQuestions - 1) {
+      setIsFinishQuizLoading(true);
       try {
         // handle last question
         await axios.post("/api/study/finish-quiz", {
           quizAttemptId: quiz.quizAttemptId,
           maxScore: numOfQuestions,
           score: quiz.score,
+          quizId,
         });
       } catch (error) {
         console.error("Error finishing quiz", error);
@@ -158,7 +163,15 @@ export default function QuestionCard({
                 handleNextQuestion().catch((error) => console.error(error))
               }
             >
-              {currentQuestionNumber === numOfQuestions - 1 ? "Finish" : "Next"}
+              {currentQuestionNumber === numOfQuestions - 1 ? (
+                isFinishQuizLoading ? (
+                  <Spinner />
+                ) : (
+                  "Finish"
+                )
+              ) : (
+                "Next"
+              )}
             </Button>
           )}
         </div>
