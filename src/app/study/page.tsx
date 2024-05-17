@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import Spinner from "@/components/ui/spinner";
 import SuggestionsList from "@/components/ui/suggestions-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { UploadDropzone } from "@/lib/uploadthing";
 import { useQuizStore } from "@/state/store";
 import { EXAM_INPUT_PATTERN } from "@/utils/exam-pattern-match";
@@ -30,11 +31,20 @@ export default function Home() {
   const [selectedTopics, setSelectedTopics] = React.useState<string[]>([]);
 
   const [videoUrl, setVideoUrl] = React.useState("");
-  const [isUploadTranscriptLoading, setIsUploadTranscriptLoading] =
-    React.useState(false);
+  const [isUploadTranscript, setIsUploadTranscript] = React.useState(false);
   const [isUploadingTranscriptDone, setIsUploadingTranscriptDone] =
     React.useState(false);
   const [transcriptHtml, setTranscriptHtml] = React.useState("");
+
+  const [notes, setNotes] = React.useState<string>("");
+  const [isUploadingNotes, setIsUploadingNotes] = React.useState(false);
+  const [isUploadingNotesDone, setIsUploadingNotesDone] = React.useState(false);
+
+  const handleSelectTopics = (topic: string) => {
+    setSelectedTopics((prev) =>
+      prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic],
+    );
+  };
 
   const handleQuizAssistant = async () => {
     setIsAssistantLoading(true);
@@ -72,7 +82,7 @@ export default function Home() {
   };
 
   const handleTranscribe = async (url: string) => {
-    setIsUploadTranscriptLoading(true);
+    setIsUploadTranscript(true);
     try {
       const res = await axios.post("/api/upload-yt", { videoUrl: url });
 
@@ -80,14 +90,22 @@ export default function Home() {
     } catch (error) {
       console.error(error);
     } finally {
-      setIsUploadTranscriptLoading(false);
+      setIsUploadTranscript(false);
       setIsUploadingTranscriptDone(true);
     }
   };
-  const handleSelectTopics = (topic: string) => {
-    setSelectedTopics((prev) =>
-      prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic],
-    );
+
+  const handleUploadNotes = async (notes: string) => {
+    setIsUploadingNotes(true);
+    try {
+      const res = await axios.post("/api/upload-notes", { userNotes: notes });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUploadingNotes(false);
+      setIsUploadingNotesDone(true);
+    }
   };
 
   if (isGeneratingQuiz) {
@@ -107,15 +125,72 @@ export default function Home() {
         </p>
       </div>
 
-      <Tabs defaultValue="pdf" className="w-full">
+      <Tabs defaultValue="notes" className="w-full">
         <TabsList className="w-full">
-          <TabsTrigger value="pdf" className="flex-1">
-            PDF
+          <TabsTrigger value="notes" className="flex-1">
+            Notes
           </TabsTrigger>
           <TabsTrigger value="yt" className="flex-1">
             YouTube
           </TabsTrigger>
+          <TabsTrigger value="pdf" className="flex-1">
+            PDF
+          </TabsTrigger>
         </TabsList>
+        <TabsContent value="notes">
+          <div className="flex flex-col gap-2">
+            <Textarea
+              placeholder="Type or paste your notes here."
+              rows={6}
+              disabled={isUploadingNotesDone}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+            <Button
+              onClick={() => handleUploadNotes(notes)}
+              disabled={isUploadingNotesDone || notes.length <= 20}
+            >
+              {isUploadingNotes ? (
+                <Spinner />
+              ) : isUploadingNotesDone ? (
+                "Uploaded"
+              ) : (
+                "Upload your notes"
+              )}
+            </Button>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="yt">
+          <div className="flex flex-col gap-2">
+            <Input
+              placeholder="https://www.youtube.com/watch?v=..."
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+            />
+            <Button
+              onClick={() => handleTranscribe(videoUrl)}
+              disabled={isUploadingTranscriptDone}
+            >
+              {isUploadTranscript ? (
+                <Spinner />
+              ) : isUploadingTranscriptDone ? (
+                "Uploaded"
+              ) : (
+                "Transcribe Video"
+              )}
+            </Button>
+            {transcriptHtml.length > 0 && (
+              <Card className="relative">
+                <div className="absolute inset-0 flex items-end bg-gradient-to-t from-background to-transparent p-4 font-bold" />
+                <div
+                  dangerouslySetInnerHTML={{ __html: transcriptHtml }}
+                  className="prose h-60 max-w-none overflow-hidden p-4 [&>article>h1]:mb-4 [&>article>h1]:font-bold [&>article>h2]:mb-4 [&>article>h2]:font-semibold [&>article>h3]:mb-4 [&>article>h3]:font-medium [&>article>ol>li]:list-inside [&>article>ol>li]:pl-4 [&>article>ol]:list-decimal [&>article>p]:mb-4 [&>article>ul>li]:mb-2 [&>article>ul>li]:list-inside [&>article>ul>li]:pl-4 [&>article>ul]:list-disc"
+                ></div>
+              </Card>
+            )}
+          </div>
+        </TabsContent>
         <TabsContent value="pdf">
           <div className="flex flex-col gap-4">
             {isAssistantLoading ||
@@ -162,38 +237,16 @@ export default function Home() {
             </ul>
           </div>
         </TabsContent>
-        <TabsContent value="yt">
-          <div className="flex flex-col gap-2">
-            <Input
-              placeholder="https://www.youtube.com/watch?v=..."
-              value={videoUrl}
-              onChange={(e) => setVideoUrl(e.target.value)}
-            />
-            <Button
-              onClick={() => handleTranscribe(videoUrl)}
-              disabled={isUploadingTranscriptDone}
-            >
-              {isUploadTranscriptLoading ? (
-                <Spinner />
-              ) : isUploadingTranscriptDone ? (
-                "Uploaded"
-              ) : (
-                "Transcribe Video"
-              )}
-            </Button>
-            {transcriptHtml.length > 0 && (
-              <Card className="relative">
-                <div className="absolute inset-0 flex items-end bg-gradient-to-t from-background to-transparent p-4 font-bold" />
-                <div
-                  dangerouslySetInnerHTML={{ __html: transcriptHtml }}
-                  className="prose h-60 max-w-none overflow-hidden p-4 [&>article>h1]:mb-4 [&>article>h1]:font-bold [&>article>h2]:mb-4 [&>article>h2]:font-semibold [&>article>h3]:mb-4 [&>article>h3]:font-medium [&>article>ol>li]:list-inside [&>article>ol>li]:pl-4 [&>article>ol]:list-decimal [&>article>p]:mb-4 [&>article>ul>li]:mb-2 [&>article>ul>li]:list-inside [&>article>ul>li]:pl-4 [&>article>ul]:list-disc"
-                ></div>
-              </Card>
-            )}
-          </div>
-        </TabsContent>
       </Tabs>
       <Separator className="my-4" />
+      {isUploadingNotesDone && (
+        <Card className="p-4">
+          <h3 className="font-semibold">Your notes have been uploaded!</h3>
+          <p className="text-muted-foreground">
+            Generate your quiz here. Select what you need to study for.
+          </p>
+        </Card>
+      )}
       <div className="flex items-center gap-2">
         <h3 className="text-nowrap">I have a</h3>
 

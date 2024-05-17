@@ -8,8 +8,12 @@ const useLocalStorage = <T>(
 
   useLayoutEffect(() => {
     const storedValue = localStorage.getItem(key);
-    if (storedValue) {
-      setValue(JSON.parse(storedValue));
+    if (storedValue !== null) {
+      try {
+        setValue(JSON.parse(storedValue));
+      } catch (error) {
+        console.error(`Error parsing localStorage item "${key}":`, error);
+      }
     }
   }, [key]);
 

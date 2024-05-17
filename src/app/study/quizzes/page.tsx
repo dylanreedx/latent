@@ -54,7 +54,7 @@ const StudyPage = () => {
     return <SignIn />;
   }
 
-  if (cachedQuizzes?.length === 0) {
+  if (!cachedQuizzes || cachedQuizzes?.length === 0) {
     return (
       <div className="mt-12 flex h-full flex-col items-center justify-center space-y-4">
         <p>You have not studied any topics yet.</p>
@@ -72,7 +72,7 @@ const StudyPage = () => {
       <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
         {cachedQuizzes?.map((quiz) => (
           <Card
-            className={`animate-come-down h-full w-full overflow-hidden delay-[${Math.floor(Math.random() * 200) + 10}ms]`}
+            className={`h-full w-full animate-come-down overflow-hidden delay-[${Math.floor(Math.random() * 200) + 10}ms]`}
             key={quiz.id}
           >
             <Link href={`/study/${quiz.topic}`}>

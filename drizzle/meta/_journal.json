@@ -15,6 +15,13 @@
       "when": 1715868631811,
       "tag": "0001_mushy_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1715968075265,
+      "tag": "0002_light_praxagora",
+      "breakpoints": true
     }
   ]
 }

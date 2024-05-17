@@ -93,5 +93,14 @@ export const youtubeVideo = sqliteTable("youtube_video", {
     .notNull(),
 });
 
+export const userNotes = sqliteTable("notes", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  text: text("text").notNull(),
+  createdAt: text("created_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+});
+
 export type InsertPost = typeof quizzes.$inferInsert;
 export type SelectPost = typeof quizzes.$inferSelect;
