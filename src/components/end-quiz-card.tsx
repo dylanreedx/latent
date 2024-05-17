@@ -40,7 +40,7 @@ export function EndQuizCard({ endOfQuiz }: Props) {
         ></div>
       </Card>
       <Progress value={100} />
-      <Link href={process.env.URL + "/study/quizzes"} className="w-full">
+      <Link href="/study/quizzes" className="w-full">
         <Button className="w-full">Finish</Button>
       </Link>
     </>
