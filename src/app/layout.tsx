@@ -26,8 +26,22 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "Latent | Study with AI and science",
+  icons: [{ rel: "icon", href: "/favicon.svg", url: "/favicon.svg" }],
   description:
     "Test ur knowledge with science-based protocols to help recall and maintain information for ur upcoming exam.",
+  openGraph: {
+    title: "Latent | Study with AI and science",
+    description:
+      "Test ur knowledge with science-based protocols to help recall and maintain information for ur upcoming exam.",
+    images: [
+      {
+        url: process.env.URL + "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "Latent | Study with AI and science",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -38,8 +52,6 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <meta property="og:image" content={process.env.URL + "/api/og"} />
-        <link rel="icon" href="/favicon.svg" sizes="any" />
         <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
         <body
           className={cn(

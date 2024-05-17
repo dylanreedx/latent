@@ -9,7 +9,7 @@ export async function GET() {
         style={{
           fontSize: 40,
           color: "black",
-          background: "black",
+          background: "#0D0D0D",
           width: "100%",
           height: "100%",
           padding: "50px 200px",
