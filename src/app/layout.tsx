@@ -28,6 +28,11 @@ export const metadata: Metadata = {
   title: "Latent | Study with AI and science",
   description:
     "Test ur knowledge with science-based protocols to help recall and maintain information for ur upcoming exam.",
+  openGraph: {
+    description:
+      "Test ur knowledge with science-based protocols to help recall and maintain information for ur upcoming exam.",
+    title: "Latent | Study with AI and science",
+  },
 };
 
 export default function RootLayout({
