@@ -38,6 +38,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <meta property="og:image" content={process.env.URL + "/api/og"} />
         <link rel="icon" href="/favicon.svg" sizes="any" />
         <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
         <body
