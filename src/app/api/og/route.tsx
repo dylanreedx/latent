@@ -16,6 +16,7 @@ export async function GET() {
           textAlign: "center",
           justifyContent: "center",
           alignItems: "center",
+          display: "flex",
         }}
       >
         <svg
