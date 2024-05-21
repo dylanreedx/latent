@@ -11,6 +11,7 @@ export async function POST(request: Request) {
     return Response.json("Unauthorized", { status: 401 });
   }
   const { userNotes }: Body = await request.json();
+  console.log("userNotes", userNotes);
   try {
     const { notes } = await EmbedAndIndexNotes(userNotes, userId);
     console.log("Embedded and indexed notes");

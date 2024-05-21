@@ -9,8 +9,4 @@ export default defineConfig({
     authToken: process.env.TURSO_AUTH_TOKEN!,
   },
   schema: "./src/db/schema.ts",
-  migrations: {
-    table: "drizzle_migrations",
-    schema: "public",
-  },
 });

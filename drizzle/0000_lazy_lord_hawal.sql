@@ -4,7 +4,7 @@ CREATE TABLE `payment` (
 	`email` text,
 	`type` text NOT NULL,
 	`amount` integer NOT NULL,
-	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `pdf_data` (
@@ -31,6 +31,7 @@ CREATE TABLE `quiz_attempts` (
 	`score` integer,
 	`max_score` integer,
 	`grade` text,
+	`report` text,
 	`started_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`finished_at` text,
 	FOREIGN KEY (`quiz_id`) REFERENCES `quizzes`(`id`) ON UPDATE no action ON DELETE cascade
@@ -52,6 +53,14 @@ CREATE TABLE `quizzes` (
 	`timeline` text,
 	`context` text,
 	`user_id` text NOT NULL,
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `notes` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`user_id` text NOT NULL,
+	`text` text NOT NULL,
+	`quiz_id` integer,
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );
 --> statement-breakpoint

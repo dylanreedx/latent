@@ -127,10 +127,15 @@ export async function EmbedAndIndexNotes(notes: string, userId: string) {
     .map((chunk) => chunk.text)
     .join("\n\n");
 
-  await db.insert(userNotes).values({
-    text: notesForDB,
-    userId,
-  });
+  try {
+    await db.insert(userNotes).values({
+      text: notesForDB,
+      userId,
+    });
+  } catch (error) {
+    console.error("Error inserting notes into SQLite:", error);
+    throw error;
+  }
 
   const endTime = Date.now();
   console.log(

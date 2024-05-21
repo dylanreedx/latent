@@ -1,9 +1,10 @@
 import { db } from "@/db/db";
-import { pdfData, quizAttempts, quizzes } from "@/db/schema";
+import { userNotes, quizzes } from "@/db/schema";
 import { convertToJSON } from "@/utils/convert-to-json";
 import { getEmbedding } from "@/utils/get-embedding";
 import { auth } from "@clerk/nextjs/server";
 import { Index } from "@upstash/vector";
+import { eq } from "drizzle-orm";
 import { OpenAI } from "openai";
 
 const oai = new OpenAI({
@@ -118,13 +119,36 @@ export async function POST(request: Request) {
     return Response.json(formattedQuestions, { status: 400 });
   }
 
-  await db.insert(quizzes).values({
-    topic: q.prompt,
-    questions: JSON.stringify(formattedQuestions),
-    timeline: q.timeline,
-    context,
-    userId,
-  });
+  const createdQuiz = await db
+    .insert(quizzes)
+    .values({
+      topic: q.prompt,
+      questions: JSON.stringify(formattedQuestions),
+      timeline: q.timeline,
+      context,
+      userId,
+    })
+    .returning({ id: quizzes.id });
+
+  try {
+    const note = await db.query.userNotes.findFirst({
+      where: (model, { eq, and, isNull }) =>
+        and(isNull(model.quizId), eq(model.userId, userId)),
+    });
+
+    if (!note) {
+      return Response.json({ questions: formattedQuestions, context });
+    }
+
+    console.log("updating userNotes", note.id, createdQuiz[0].id);
+
+    await db
+      .update(userNotes)
+      .set({ quizId: createdQuiz[0].id })
+      .where(eq(userNotes.id, note.id));
+  } catch (error) {
+    console.log("error updating userNotes", error);
+  }
 
   return Response.json({ questions: formattedQuestions, context });
 }

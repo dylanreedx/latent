@@ -10,7 +10,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { SignIn, useAuth } from "@clerk/nextjs";
-import { TrashIcon } from "@radix-ui/react-icons";
+import { EyeOpenIcon, TrashIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import axios from "axios";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -41,6 +41,11 @@ const StudyPage = () => {
 
     fetchQuizzes();
   }, []);
+
+  const viewNotes = async (id: string) => {
+    console.log(id);
+    const notes = await axios.post("/api/get-summarized-notes", { quizId: id });
+  };
 
   const deleteQuiz = async (id: number) => {
     await axios.delete("/api/delete-quiz", {
@@ -88,13 +93,21 @@ const StudyPage = () => {
             <CardContent>
               <p>4 days left</p>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="gap-2">
               <Button
-                variant="secondary"
+                variant="destructive"
                 onClick={() => deleteQuiz(quiz.id)}
-                className="w-full items-center justify-center gap-2"
+                className="flex-1 items-center justify-center gap-2"
               >
                 Delete <TrashIcon />
+              </Button>
+
+              <Button
+                onClick={() => viewNotes(quiz.id.toString())}
+                variant="secondary"
+                className="flex-1 items-center justify-center gap-2"
+              >
+                View <EyeOpenIcon />
               </Button>
             </CardFooter>
           </Card>

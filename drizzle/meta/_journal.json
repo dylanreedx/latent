@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1715783059473,
-      "tag": "0000_clumsy_vin_gonzales",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1715868631811,
-      "tag": "0001_mushy_hulk",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1715968075265,
-      "tag": "0002_light_praxagora",
+      "when": 1716305875393,
+      "tag": "0000_lazy_lord_hawal",
       "breakpoints": true
     }
   ]

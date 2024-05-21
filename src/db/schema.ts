@@ -97,6 +97,7 @@ export const userNotes = sqliteTable("notes", {
   id: integer("id").primaryKey(),
   userId: text("user_id").notNull(),
   text: text("text").notNull(),
+  quizId: integer("quiz_id"),
   createdAt: text("created_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
