@@ -14,6 +14,7 @@ import { EyeOpenIcon, TrashIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import axios from "axios";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { useQuizNoteStore } from "@/state/store";
 
 interface Quiz {
   id: number;
@@ -42,17 +43,25 @@ const StudyPage = () => {
     fetchQuizzes();
   }, []);
 
-  const viewNotes = async (id: string) => {
-    console.log(id);
-    const notes = await axios.post("/api/get-summarized-notes", { quizId: id });
-  };
-
   const deleteQuiz = async (id: number) => {
     await axios.delete("/api/delete-quiz", {
       data: { id },
     });
     const updatedQuizzes = cachedQuizzes.filter((quiz) => quiz.id !== id);
     setCachedQuizzes(updatedQuizzes);
+  };
+
+  const viewNote = async (id: number) => {
+    const res = await axios.post(
+      `${process.env.URL}/api/get-summarized-notes`,
+      {
+        quizId: id,
+      },
+    );
+
+    const notes = res.data;
+
+    useQuizNoteStore.setState({ notes });
   };
 
   if (!userId) {
@@ -102,13 +111,14 @@ const StudyPage = () => {
                 Delete <TrashIcon />
               </Button>
 
-              <Button
-                onClick={() => viewNotes(quiz.id.toString())}
-                variant="secondary"
-                className="flex-1 items-center justify-center gap-2"
-              >
-                View <EyeOpenIcon />
-              </Button>
+              <Link href={`/study/quizzes/${quiz.id}`} className="flex-1">
+                <Button
+                  variant="secondary"
+                  className="w-full items-center justify-center gap-2"
+                >
+                  View <EyeOpenIcon />
+                </Button>
+              </Link>
             </CardFooter>
           </Card>
         ))}

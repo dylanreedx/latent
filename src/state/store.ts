@@ -20,3 +20,11 @@ export const useQuizStore = create<QuizStore>((set) => ({
   score: 0,
   quizAttemptId: 0,
 }));
+
+export interface QuizNoteStore {
+  notes: string;
+}
+
+export const useQuizNoteStore = create<QuizNoteStore>((set) => ({
+  notes: "",
+}));
