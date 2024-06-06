@@ -103,22 +103,22 @@ const StudyPage = () => {
               <p>4 days left</p>
             </CardContent>
             <CardFooter className="gap-2">
+              <Link href={`/study/quizzes/${quiz.id}`} className="flex-1">
+                <Button
+                  variant="ghost"
+                  className="w-full items-center justify-center gap-2"
+                >
+                  View <EyeOpenIcon />
+                </Button>
+              </Link>
               <Button
-                variant="destructive"
+                variant="secondary"
                 onClick={() => deleteQuiz(quiz.id)}
                 className="flex-1 items-center justify-center gap-2"
               >
                 Delete <TrashIcon />
               </Button>
 
-              <Link href={`/study/quizzes/${quiz.id}`} className="flex-1">
-                <Button
-                  variant="secondary"
-                  className="w-full items-center justify-center gap-2"
-                >
-                  View <EyeOpenIcon />
-                </Button>
-              </Link>
             </CardFooter>
           </Card>
         ))}
